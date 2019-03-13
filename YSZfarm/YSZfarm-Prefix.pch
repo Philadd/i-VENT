@@ -1,0 +1,55 @@
+//
+//  YSZfarm-Prefix.pch
+//  YSZfarm
+//
+//  Created by Mac on 2017/12/12.
+//  Copyright © 2017年 yusz. All rights reserved.
+//
+
+#ifndef YSZfarm_Prefix_pch
+#define YSZfarm_Prefix_pch
+
+#ifdef __OBJC__
+#import "NSObject+Common.h"
+#import "NSString+Common.h"
+#import "UILabel+Common.h"
+#import "UIButton+Common.h"
+#import "UITextField+Common.h"
+#import "UIColor+ColorChange.h"
+#import "Masonry.h"
+#import "AFHTTPSessionManager.h"
+#import "FarmDatabase.h"
+#import <SVProgressHUD/SVProgressHUD.h>
+#endif
+
+#define EZOPENSDK [EZOpenSDK class]
+//#define EzvizAppKey @"fbd60f9eb1a945d6874a10763a610e4d"
+#define EzvizAppKey @"725dfa73f06a4f46a3d7166e693a5207"
+
+#define baiduSdkKey @"lIUV5Pbmg1cIm5mBTj5oVmGYofL5v5RS"
+
+
+#define ScreenWidth                         [[UIScreen mainScreen] bounds].size.width
+#define ScreenHeight                        [[UIScreen mainScreen] bounds].size.height
+#define SectionViewHeight 44
+#define LocalString(x)      NSLocalizedString(x, nil)
+#define kKeyWindow [UIApplication sharedApplication].keyWindow
+
+#define yAutoFit(x) (ScreenWidth < ScreenHeight ? ScreenWidth / 375.f * x : ScreenHeight / 375.f * x)
+
+#define J2String(value) [value isKindOfClass:[NSString class]]?value:[value stringValue]
+#define J2Number(value) [value isKindOfClass:[NSNumber class]]?value:[value stringValue]
+
+#define kDevice_Is_iPhone4 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
+#define kDevice_Is_iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+#define kDevice_Is_iPhone6 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(750, 1334), [[UIScreen mainScreen] currentMode].size) : NO)
+#define kDevice_Is_iPhone6Plus ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2208), [[UIScreen mainScreen] currentMode].size) : NO)
+#define kDevice_Is_iPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
+
+#define getRectNavAndStatusHight (self.navigationController.navigationBar.frame.size.height+[[UIApplication sharedApplication] statusBarFrame].size.height)
+
+#define yHttpTimeoutInterval 6.f
+#define yColor_back @"F0EFF5"
+//#define yColor_back @"5C5E66"
+
+#endif /* YSZfarm_Prefix_pch */
