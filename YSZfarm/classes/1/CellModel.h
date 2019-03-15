@@ -13,7 +13,6 @@
 @property (nonatomic,strong) NSString *deviceId;
 @property (nonatomic,strong) NSString *apiKey;
 @property (nonatomic,strong) NSString *title;
-@property (nonatomic,strong) NSString *connectType;
 @property (nonatomic,strong) NSDictionary *location;
 @property (nonatomic,strong) NSString *groupName;
 @property (nonatomic,strong) NSNumber *auth;

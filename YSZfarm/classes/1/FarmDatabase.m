@@ -61,20 +61,17 @@ static FarmDatabase* _instance = nil;
 }
 
 - (void)getDeviceData:(void(^)())block{
-    __weak typeof(self) weakSelf = self;
     
     if (_userId != nil) {
         
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
         
         [manager.requestSerializer setValue:_userId forHTTPHeaderField:@"userId"];
-        NSLog(@"%@",self.userId);
         [manager GET:@"http://rijin.thingcom.com:80/api/v1/relation/user/netgates" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
             if (block) {
                 block(responseDic);
             }
-            NSLog(@"fans%@",responseDic);
             
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             NSLog(@"Error:%@",error);

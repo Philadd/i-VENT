@@ -16,12 +16,15 @@
 #import "DatapointBit16_32Cell.h"
 #import "UnusualTableViewCell.h"
 #import "controledMonitorModel.h"
+#import "DatapointButtonFFCell.h"
 
 NSString *const CellIdentifier_unusual = @"CellID_unusual";
 NSString *const CellIdentifier_Datapoint = @"CellID_datapoint";
 NSString *const CellIdentifier_DatapointBIt = @"CellID_datapointBit";
+NSString *const CellIdentifier_DatapointButtonFF = @"CellID_datapointButtonFF";
 NSString *const CellIdentifier_DatapointBit16_32 = @"CellID_datapointBit16_32";
 NSString *const SectionIdentifier_device = @"SectionHeader_device";
+
 
 @interface DataMonitorView ()
 @property (nonatomic, strong) UITableView *myTableView;
@@ -39,7 +42,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self viewLayout];
-    [self plcModelJsonInit];
+    //[self plcModelJsonInit];
     [self bindDatapointStatus];
     
     _controledMonitors = [[NSMutableArray alloc] init];
@@ -86,7 +89,9 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         [tableView registerClass:[UnusualTableViewCell class] forCellReuseIdentifier:CellIdentifier_unusual];
         [tableView registerClass:[DevieceDataCell class] forCellReuseIdentifier:CellIdentifier_Datapoint];
         [tableView registerClass:[DatapointBitCell class] forCellReuseIdentifier:CellIdentifier_DatapointBIt];
-        [tableView registerClass:[DatapointBit16_32Cell class] forCellReuseIdentifier:CellIdentifier_DatapointBit16_32];
+        [tableView registerClass:[DatapointButtonFFCell class] forCellReuseIdentifier:CellIdentifier_DatapointButtonFF];
+        [tableView registerClass:[DatapointBit16_32Cell class]
+          forCellReuseIdentifier:CellIdentifier_DatapointBit16_32];
         [tableView registerClass:[DeviceSectionView class] forHeaderFooterViewReuseIdentifier:SectionIdentifier_device];
         [self.view addSubview:tableView];
         tableView.estimatedRowHeight = 0;
@@ -105,36 +110,49 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 
 #pragma mark - DataInit
 //懒加载
-- (void)plcModelJsonInit{
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager GET:@"http://ozcxjr6ov.bkt.clouddn.com/plcInfo.json" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-        _plcModelJson = responseDic;
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"Error: %@", error);
-    }];
-}
+//- (void)plcModelJsonInit{
+//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//    [manager GET:@"http://ozcxjr6ov.bkt.clouddn.com/plcInfo.json" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+//        _plcModelJson = responseDic;
+//
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        NSLog(@"Error: %@", error);
+//    }];
+//}
 
 //懒加载
 - (NSMutableArray *)sectionData:(NSDictionary *)dic{
     if (_sectionData == nil) {
         _sectionData = [[NSMutableArray alloc]init];
-        
-        if (([[dic objectForKey:@"data"] isKindOfClass:[NSArray class]] && [[dic objectForKey:@"data"] count] > 0)) {
+          NSLog(@"监控%@",dic);
+        if ([[dic objectForKey:@"data"] isKindOfClass:[NSArray class]] && [[dic objectForKey:@"data"] count] > 0) {
             [[dic objectForKey:@"data"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                
                 DeviceSectionModel *model = [[DeviceSectionModel alloc] init];
-                model.deviceGroupName = J2String([obj objectForKey:@"groupName"]);
-                model.datapointGroupUid = J2String([obj objectForKey:@"datapointGroupUid"]);
-                if (obj[@"datapointGroupId"] && [obj[@"datapointGroupId"] isKindOfClass:[NSNumber class]]) {
-                    model.datapointGroupId = obj[@"datapointGroupId"];
+                model.deviceGroupName = J2String([obj objectForKey:@"name"]);
+                model.datapointGroupUid = J2String([obj objectForKey:@"mac"]);
+                    if (obj[@"mac"] && [obj[@"mac"] isKindOfClass:[NSNumber class]]) {
+                    model.datapointGroupId = obj[@"mac"];
                 }else{
                     NSLog(@"datapointGroupId不是number类型");
                 }
                 NSMutableArray *array = [[NSMutableArray alloc] init];
-                [obj[@"datapoints"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [obj[@"streams"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    
                     DeviceCellModel *cell = [[DeviceCellModel alloc] init];
-                    if (obj[@"streamName"]) {
-                        cell.streamName = J2String(obj[@"streamName"]);
+                    if (obj[@"name"]) {
+                        cell.streamName = obj[@"name"];
+                    }
+                    if (obj[@"streamId"]) {
+                        cell.streamId = J2String(obj[@"streamId"]);
+                    }
+                    if (obj[@"rw"]) {
+                        cell.writeRead = J2String(obj[@"rw"]);
+                        
+                    }
+                    if (obj[@"unit"]) {
+                        cell.unit = J2String(obj[@"unit"]);
                     }
                     if (obj[@"sn"]) {
                         cell.sn = J2String(obj[@"sn"]);
@@ -142,18 +160,11 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     if (obj[@"streamUid"]) {
                         cell.streamUid = J2String(obj[@"streamUid"]);
                     }
-                    if (obj[@"streamId"]) {
-                        cell.streamId = J2String(obj[@"streamId"]);
-                    }
-                    if (obj[@"writeRead"]) {
-                        cell.writeRead = J2String(obj[@"writeRead"]);
-                    }
+
                     if (obj[@"desc"]) {
                         cell.desc = J2String(obj[@"desc"]);
                     }
-                    if (obj[@"unit"]) {
-                        cell.unit = J2String(obj[@"unit"]);
-                    }
+
                     if (obj[@"dataType"]) {
                         cell.dataType = J2String(obj[@"dataType"]);
                     }
@@ -205,7 +216,9 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     }else{
                         NSLog(@"modbusRegisterAdd不是number类型");
                     }
-                    if ([[FarmDatabase shareInstance].deviceDicOnenet[@"error"] isEqualToString:@"succ"]) {
+                    NSLog(@"我的数据%@",[FarmDatabase shareInstance].deviceDicOnenet);
+                    
+                    if ([FarmDatabase shareInstance].deviceDicOnenet) {
                         NSArray *onenetDatapoints = [[NSArray alloc] init];
                         onenetDatapoints = [[[[FarmDatabase shareInstance].deviceDicOnenet objectForKey:@"data"] objectForKey:@"devices"] copy];
                         [[onenetDatapoints[0] objectForKey:@"datastreams"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -292,6 +305,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                 }];
                 model.cellArray = [array copy];
                 [_sectionData addObject:model];
+                NSLog(@"我的数组%@",model.cellArray);
                 
             }];
         }
@@ -318,24 +332,31 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     [manager.requestSerializer setValue:[FarmDatabase shareInstance].sn forHTTPHeaderField:@"sn"];
-    [manager GET:@"http://rijin.thingcom.com:80/api/v1/relation/netgate/streams" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    
+    NSString *url = [NSString stringWithFormat:@"http://rijin.thingcom.com:80/api/v1/relation/netgate/streams?sn=%@",[FarmDatabase shareInstance].sn];
+    url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+   
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
         NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
         NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         NSLog(@"success:%@",daetr);
         [[FarmDatabase shareInstance] setDeviceDic:responseDic];
+        NSLog(@"返回数据%@",responseDic);
+        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"Error:%@",error);
     }];
     
     AFHTTPSessionManager *manager1 = [AFHTTPSessionManager manager];
     [manager1.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
-    NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/devices/datapoints"];
+    NSString *Url = [NSString stringWithFormat:@"http://api.heclouds.com/devices/datapoints"];
     NSDictionary *parameters = @{@"devIds":[FarmDatabase shareInstance].deviceId};
-    url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-    [manager1 GET:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    Url = [Url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+    [manager1 GET:Url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
         [[FarmDatabase shareInstance] setDeviceDicOnenet:responseDic];
+        NSLog(@"niubi%@",responseDic);
         _sectionData = nil;
         [self sectionData:[[FarmDatabase shareInstance] deviceDic]];
         [_sectionData enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -352,7 +373,38 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
     
 }
 
+
+- (void)addDatapointGrounp{
+    [SVProgressHUD show];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [manager.requestSerializer setValue:[FarmDatabase shareInstance].userId forHTTPHeaderField:@"userId"];
+    
+    NSString *url = [NSString stringWithFormat:@"http://rijin.thingcom.com:80/api/v1/netgate/group"];
+    url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+    
+    [manager POST:url parameters: nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+        NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+        NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"success:%@",daetr);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"Error:%@",error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
+    }];
+     
+     
+}
+
 - (void)bindDatapointStatus{
+    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [manager.requestSerializer setValue:[FarmDatabase shareInstance].sn forHTTPHeaderField:@"sn"];
@@ -421,8 +473,10 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         cell.dataMonitorName.text = model.streamName;
         return cell;
     }
-    if ([model.writeRead isEqualToString:@"r"]) {
-        if ([model.dataType isEqualToString:@"bit"]){
+    NSLog(@"读写操作%@",model.writeRead);
+    
+    if ([model.writeRead intValue] == 0) {
+        if ([model.dataType intValue] == 1){
             DatapointBitCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBIt];
             cell.dataMonitorName.text = model.streamName;
             
@@ -446,7 +500,18 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
             }
             cell.dataMonitorSwitch.enabled = NO;
             return cell;
-        }else if ([model.dataType isEqualToString:@"bit16"] || [model.dataType isEqualToString:@"bit32"]){
+        }else{
+            DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
+            cell.deviceName.text = model.streamName;
+            if (model.value) {
+                cell.monitorData.text = [NSString valueFromIntDecUnit:model.decimalBit value:model.value unit:model.unit];
+            }else{
+                cell.monitorData.text = @"NULL";
+            }
+            return cell;
+        }
+    }else{
+        if ([model.dataType intValue] == 0) {
             DatapointBit16_32Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBit16_32];
             cell.dataMonitorName.text = model.streamName;
             if (model.value) {
@@ -456,6 +521,34 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
             }
             cell.dataMonitorDataTF.enabled = NO;
             return cell;
+        }else if ([model.dataType intValue] == 1){
+            DatapointBitCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBIt];
+            cell.dataMonitorName.text = model.streamName;
+            if ([[FarmDatabase shareInstance].auth isEqualToNumber:[NSNumber numberWithInt:4]]) {
+                //判断用户对这个网关的权限
+                cell.dataMonitorSwitch.enabled = NO;
+            }
+            
+            if ([model.bindDeviceType isEqualToString:@"local"]){
+                if ([model.value intValue]) {
+                    cell.dataMonitorSwitch.on = YES;
+                }else{
+                    cell.dataMonitorSwitch.on = NO;
+                }
+            }else{
+                if ([model.value intValue] % 2) {
+                    cell.dataMonitorSwitch.on = YES;
+                }else{
+                    cell.dataMonitorSwitch.on = NO;
+                }
+            }
+            cell.dataMonitorSwitch.enabled = NO;
+            return cell;
+        }else if ([model.dataType intValue] == 2){
+            DatapointButtonFFCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointButtonFF];
+            cell.dataMonitorName.text = model.streamName;
+            return cell;
+            
         }else{
             DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
             cell.deviceName.text = model.streamName;
@@ -467,650 +560,699 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
             return cell;
         }
         
-    }else if ([model.dataType isEqualToString:@"bit"]){
-        DatapointBitCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBIt];
-        cell.dataMonitorName.text = model.streamName;
-        if ([model.bindDeviceType isEqualToString:@"local"]){
-            if ([model.value intValue]) {
-                cell.dataMonitorSwitch.on = YES;
-            }else{
-                cell.dataMonitorSwitch.on = NO;
-            }
-        }else{
-            if ([model.value intValue] % 2) {
-                cell.dataMonitorSwitch.on = YES;
-            }else{
-                cell.dataMonitorSwitch.on = NO;
-            }
-        }
-       
-        cell.block = ^(BOOL isOn) {
-            
-            //如果之前控制的监控点还在重发，直接终止
-            for (int i = 0;i < _controledMonitors.count;i++) {
-                controledMonitorModel *conModel = _controledMonitors[i];
-                if ([model.streamId isEqualToString:conModel.streamId]) {
-                    [_controledMonitors removeObject:conModel];
-                }
-            }
-                        
-            if ([model.bindDeviceType isEqualToString:@"local"]) {
-                /**
-                 *local_ASCII控制
-                 */
-                NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
-                [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
-                NSDictionary *localDic = _plcModelJson[@"local"];
-                NSArray *dataTypeArray = localDic[@"dataType"];
-                [dataTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([obj[@"type"] isEqualToString:@"bit"]) {
-                        [obj[@"register"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                            if ([obj[@"name"] isEqualToString:model.addressType]) {
-                                if (obj[@"wcode"] && [obj[@"wcode"] isKindOfClass:[NSNumber class]]) {
-                                    [frame appendFormat:@"%@",[NSString HexByInt:[obj[@"wcode"] intValue]]];
-                                    long address = [obj[@"start"] intValue] + [model.address intValue];
-                                    [frame appendFormat:@"%@",[NSString HexByLong:address]];
-                                }
-                            }
-                        }];
-                    }
-                }];
-                if (isOn) {
-                    [frame appendFormat:@"%@",@"FF00"];
-                }else{
-                    [frame appendFormat:@"%@",@"0000"];
-                }
-                [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
-                [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
-                NSLog(@"%@",frame);
-                
-                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-                [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-                [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
-                
-                NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
-                
-                NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
-                url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
-                url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-                
-                //重发机制等
-                controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
-                conModel.streamId = model.streamId;
-                if (isOn) {
-                    conModel.modifyValue = [NSNumber numberWithInt:1];
-                }else{
-                    conModel.modifyValue = [NSNumber numberWithInt:0];
-                }
-                conModel.judgeNum = 3;
-                conModel.resendTime = 0;
-                conModel.parameters = parameters;
-                conModel.url = url;
-                [_controledMonitors addObject:conModel];
-                
-                [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
-                 {
-                     NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-                     NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
-                     NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-                     
-                     
-                     NSLog(@"success:%@",daetr);
-                 } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                     NSLog(@"Error:%@",error);
-                 }];
-            }else{
-                /**
-                 *plc_ASCII控制
-                 */
-                NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
-                [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
-                NSArray *plcCompanyArray = _plcModelJson[@"plc"];
-                [plcCompanyArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([obj[@"company"] isEqualToString:model.bindDeviceType]) {
-                        NSArray *deviceTypeArray = obj[@"deviceType"];
-                        [deviceTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                            if ([obj[@"name"] isEqualToString:model.bindDeviceName]) {
-                                NSArray *dataTypeArray = obj[@"dataType"];
-                                [dataTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                                    if ([obj[@"type"]isEqualToString:model.dataType]) {
-                                        NSArray *registerArray = obj[@"register"];
-                                        [registerArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                                            if ([obj[@"name"] isEqualToString:model.addressType]) {
-                                                if (obj[@"wcode"] && [obj[@"wcode"] isKindOfClass:[NSNumber class]]) {
-                                                    [frame appendFormat:@"%@",[NSString HexByInt:[obj[@"wcode"] intValue]]];
-                                                    if ([obj[@"split"] intValue] == 0) {
-                                                        long address = [obj[@"start"] intValue] + [model.address intValue];
-                                                        [frame appendFormat:@"%@",[NSString HexByLong:address]];
-                                                    }else{
-                                                        long address = 0;
-                                                        NSArray *addressArray = obj[@"address"];
-                                                        NSDictionary *addressDic1 = addressArray[0];
-                                                        NSDictionary *addressDic2 = addressArray[1];
-                                                        if ([addressDic1[@"start"] intValue] > [addressDic2[@"start"] intValue]) {
-                                                            addressDic1 = addressArray[1];
-                                                            addressDic2 = addressArray[0];
-                                                        }
-                                                        if ([model.address intValue] >= [addressDic1[@"length"] intValue]) {
-                                                            address = [addressDic2[@"start"] intValue] + [model.address intValue] - [addressDic1[@"length"] intValue];
-                                                            [frame appendFormat:@"%@",[NSString HexByLong:address]];
-                                                        }else{
-                                                            address = [addressDic1[@"start"] intValue] + [model.address intValue];
-                                                            [frame appendFormat:@"%@",[NSString HexByLong:address]];
-                                                        }
-                                                    }
-                                                    
-                                                }
-                                                
-                                            }
-                                        }];
-                                    }
-                                }];
-                            }
-                        }];
-                    }
-                }];
-                if (isOn) {
-                    [frame appendFormat:@"%@",@"FF00"];
-                }else{
-                    [frame appendFormat:@"%@",@"0000"];
-                }
-                [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
-                [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
-                NSLog(@"%@",frame);
-                
-                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-                [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-                [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
-                
-                NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
-                
-                NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
-                url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
-                url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-                
-                //重发机制
-                controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
-                conModel.streamId = model.streamId;
-                if (isOn) {
-                    conModel.modifyValue = [NSNumber numberWithInt:1];
-                }else{
-                    conModel.modifyValue = [NSNumber numberWithInt:0];
-                }
-                conModel.judgeNum = 3;
-                conModel.resendTime = 0;
-                conModel.parameters = parameters;
-                conModel.url = url;
-                [_controledMonitors addObject:conModel];
-                
-                [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
-                {
-                    NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-                    NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
-                    NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-                    
-                    
-                    
-                    NSLog(@"success:%@",daetr);
-                } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                    NSLog(@"Error:%@",error);
-                }];
-            }
-            
-        };
-        return cell;
-    }else if ([model.dataType isEqualToString:@"bit16"] || [model.dataType isEqualToString:@"bit32"]){
-        DatapointBit16_32Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBit16_32];
-        cell.dataMonitorName.text = model.streamName;
-        
-        if ([[FarmDatabase shareInstance].auth isEqualToNumber:[NSNumber numberWithInt:4]]) {
-            //判断用户对这个网关的权限
-            cell.dataMonitorDataTF.enabled = NO;
-        }
-        
-        if (model.value) {
-            cell.dataMonitorDataTF.text = [NSString valueFromIntDecUnit:model.decimalBit value:model.value unit:model.unit];
-        }else{
-            cell.dataMonitorDataTF.text = @"NULL";
-        }
-        //cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%@",model.value];
-        __weak typeof(self) weakSelf = self;
-        cell.block_timerstart = ^{
-            [weakSelf.timer setFireDate:[NSDate date]];
-        };
-        cell.block_timerpause = ^{
-            [weakSelf.timer setFireDate:[NSDate distantFuture]];
-            
-        };
-        cell.block = ^(NSString *fieldText) {
-            
-            for (int i = 0;i < _controledMonitors.count;i++) {
-                controledMonitorModel *conModel = _controledMonitors[i];
-                if ([model.streamId isEqualToString:conModel.streamId]) {
-                    [_controledMonitors removeObject:conModel];
-                }
-            }
-            
-            if ([model.bindDeviceType isEqualToString:@"local"]) {
-                /**
-                 *local_ASCII控制
-                 */
-                NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
-                [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
-                NSDictionary *localDic = _plcModelJson[@"local"];
-                NSArray *dataTypeArray = localDic[@"dataType"];
-                [dataTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([obj[@"type"] isEqualToString:@"bit"]) {
-                        [obj[@"register"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                            if ([obj[@"name"] isEqualToString:model.addressType]) {
-                                if (obj[@"wcode"] && [obj[@"wcode"] isKindOfClass:[NSNumber class]]) {
-                                    [frame appendFormat:@"%@",[NSString HexByInt:[obj[@"wcode"] intValue]]];
-                                    long address = [obj[@"start"] intValue] + [model.address intValue];
-                                    [frame appendFormat:@"%@",[NSString HexByLong:address]];
-                                }
-                            }
-                        }];
-                    }
-                }];
-                [frame appendFormat:@"%@",[NSString HexByTextFieldFloat:fieldText decimal:[model.decimalBit intValue]]];
-                [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
-                [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
-                NSLog(@"%@",frame);
-                
-                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-                [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-                [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
-                
-                NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
-                
-                NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
-                url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
-                url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-                
-                //重发机制
-                controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
-                conModel.streamId = model.streamId;
-                conModel.modifyValue = [NSNumber numberWithInt:[NSString fieldText2long:fieldText decimal:[model.decimalBit intValue]]];
-                conModel.judgeNum = 3;
-                conModel.resendTime = 0;
-                conModel.parameters = parameters;
-                conModel.url = url;
-                [_controledMonitors addObject:conModel];
-                
-                [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
-                 {
-                     NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-                     NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
-                     NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-                     
-                     
-                     
-                     NSLog(@"success:%@",daetr);
-                 } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                     NSLog(@"Error:%@",error);
-                 }];
-            }else{
-                /**
-                 *plc_ASCII控制
-                 */
-                NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
-                [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
-                NSArray *plcCompanyArray = _plcModelJson[@"plc"];
-                [plcCompanyArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([obj[@"company"] isEqualToString:model.bindDeviceType]) {
-                        NSArray *deviceTypeArray = obj[@"deviceType"];
-                        [deviceTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                            if ([obj[@"name"] isEqualToString:model.bindDeviceName]) {
-                                NSArray *dataTypeArray = obj[@"dataType"];
-                                [dataTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                                    if ([obj[@"type"]isEqualToString:model.dataType]) {
-                                        NSArray *registerArray = obj[@"register"];
-                                        [registerArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                                            if ([obj[@"name"] isEqualToString:model.addressType]) {
-                                                if (obj[@"wcode"] && [obj[@"wcode"] isKindOfClass:[NSNumber class]]) {
-                                                    [frame appendFormat:@"%@",[NSString HexByInt:[obj[@"wcode"] intValue]]];
-                                                    if ([obj[@"split"] intValue] == 0) {
-                                                        long address = [obj[@"start"] intValue] + [model.address intValue];
-                                                        [frame appendFormat:@"%@",[NSString HexByLong:address]];
-                                                    }else{
-                                                        long address = 0;
-                                                        NSArray *addressArray = obj[@"address"];
-                                                        NSDictionary *addressDic1 = addressArray[0];
-                                                        NSDictionary *addressDic2 = addressArray[1];
-                                                        if ([addressDic1[@"start"] intValue] > [addressDic2[@"start"] intValue]) {
-                                                            addressDic1 = addressArray[1];
-                                                            addressDic2 = addressArray[0];
-                                                        }
-                                                        if ([model.address intValue] >= [addressDic1[@"length"] intValue]) {
-                                                            address = [addressDic2[@"start"] intValue] + [model.address intValue] - [addressDic1[@"length"] intValue];
-                                                            [frame appendFormat:@"%@",[NSString HexByLong:address]];
-                                                        }else{
-                                                            address = [addressDic1[@"start"] intValue] + [model.address intValue];
-                                                            [frame appendFormat:@"%@",[NSString HexByLong:address]];
-                                                        }
-                                                    }
-                                                    
-                                                }
-                                                
-                                            }
-                                        }];
-                                    }
-                                }];
-                            }
-                        }];
-                    }
-                }];
-                [frame appendFormat:@"%@",[NSString HexByTextFieldFloat:fieldText decimal:[model.decimalBit intValue]]];
-                [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
-                [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
-                NSLog(@"%@",frame);
-                
-                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-                [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-                [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
-                
-                NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
-                
-                NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
-                url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
-                url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-                
-                //重发机制
-                controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
-                conModel.streamId = model.streamId;
-                conModel.modifyValue = [NSNumber numberWithInt:[NSString fieldText2long:fieldText decimal:[model.decimalBit intValue]]];
-                conModel.judgeNum = 3;
-                conModel.resendTime = 0;
-                conModel.parameters = parameters;
-                conModel.url = url;
-                [_controledMonitors addObject:conModel];
-                
-                [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
-                 {
-                     NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-                     NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
-                     NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-                     NSLog(@"success:%@",daetr);
-                     
-                     
-                     
-                 } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                     NSLog(@"Error:%@",error);
-                 }];
-            }
-        };
-        
-        return cell;
-    }else if ([model.dataType isEqualToString:@""]){
-        if ([model.modbusCode intValue] == 01) {
-            DatapointBitCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBIt];
-            cell.dataMonitorName.text = model.streamName;
-            
-            if ([[FarmDatabase shareInstance].auth isEqualToNumber:[NSNumber numberWithInt:4]]) {
-                //判断用户对这个网关的权限
-                cell.dataMonitorSwitch.enabled = NO;
-            }
-            
-            if (model.value) {
-                cell.dataMonitorSwitch.on = YES;
-            }else{
-                cell.dataMonitorSwitch.on = NO;
-            }
-            cell.block = ^(BOOL isOn) {
-                
-                for (int i = 0;i < _controledMonitors.count;i++) {
-                    controledMonitorModel *conModel = _controledMonitors[i];
-                    if ([model.streamId isEqualToString:conModel.streamId]) {
-                        [_controledMonitors removeObject:conModel];
-                    }
-                }
-                
-                if ([model.bindDeviceType isEqualToString:@"MODBUS"]){
-                    if ([model.protocol isEqualToString:@"RTU"]) {
-                        /**
-                         *modbus_RTU控制
-                         */
-                        NSMutableString *frame = [NSMutableString stringWithFormat:@""];
-                        [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
-                        if ([model.modbusCode intValue] == 01) {
-                            [frame appendFormat:@"%@",[NSString HexByInt:05]];
-                        }else{
-                            [frame appendFormat:@"%@",[NSString HexByInt:06]];
-                        }
-                        [frame appendFormat:@"%@",[NSString HexByLong:[model.modbusRegisterAdd longValue]]];
-                        if (isOn) {
-                            [frame appendFormat:@"%@",@"FF00"];
-                        }else{
-                            [frame appendFormat:@"%@",@"0000"];
-                        }
-                        [frame appendFormat:@"%@",[NSString crcFromFrame:frame]];
-                        NSLog(@"%@",frame);
-                        
-                        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-                        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-                        [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
-                        
-                        NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"RTU",@"streamId":model.streamId};
-                        
-                        NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
-                        url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
-                        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-                        
-                        //重发机制
-                        controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
-                        conModel.streamId = model.streamId;
-                        if (isOn) {
-                            conModel.modifyValue = [NSNumber numberWithInt:1];
-                        }else{
-                            conModel.modifyValue = [NSNumber numberWithInt:0];
-                        }
-                        conModel.judgeNum = 3;
-                        conModel.resendTime = 0;
-                        conModel.parameters = parameters;
-                        conModel.url = url;
-                        [_controledMonitors addObject:conModel];
-                        
-                        [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
-                         {
-                             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-                             NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
-                             NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-                             
-                             
-                             
-                             NSLog(@"success:%@",daetr);
-                         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                             NSLog(@"Error:%@",error);
-                         }];
-                    }else if ([model.protocol isEqualToString:@"ASCII"]){
-                        /**
-                         *modbus_ASCII控制
-                         */
-                        NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
-                        [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
-                        if ([model.modbusCode intValue] == 01) {
-                            [frame appendFormat:@"%@",[NSString HexByInt:05]];
-                        }else{
-                            [frame appendFormat:@"%@",[NSString HexByInt:06]];
-                        }
-                        [frame appendFormat:@"%@",[NSString HexByLong:[model.modbusRegisterAdd longValue]]];
-                        if (isOn) {
-                            [frame appendFormat:@"%@",@"FF00"];
-                        }else{
-                            [frame appendFormat:@"%@",@"0000"];
-                        }
-                        [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
-                        [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
-                        NSLog(@"%@",frame);
-                        
-                        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-                        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-                        [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
-                        
-                        NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
-                        
-                        NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
-                        url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
-                        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-                        
-                        //重发机制
-                        controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
-                        conModel.streamId = model.streamId;
-                        if (isOn) {
-                            conModel.modifyValue = [NSNumber numberWithInt:1];
-                        }else{
-                            conModel.modifyValue = [NSNumber numberWithInt:0];
-                        }
-                        conModel.judgeNum = 3;
-                        conModel.resendTime = 0;
-                        conModel.parameters = parameters;
-                        conModel.url = url;
-                        [_controledMonitors addObject:conModel];
-                        
-                        [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
-                         {
-                             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-                             NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
-                             NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-                             NSLog(@"success:%@",daetr);
-                             
-                             
-                             
-                         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                             NSLog(@"Error:%@",error);
-                         }];
-                    }
-                }
-                
-            };
-            return cell;
-        }else{
-            DatapointBit16_32Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBit16_32];
-            cell.dataMonitorName.text = model.streamName;
-            
-            if ([[FarmDatabase shareInstance].auth isEqualToNumber:[NSNumber numberWithInt:4]]) {
-                //判断用户对这个网关的权限
-                cell.dataMonitorDataTF.enabled = NO;
-            }
-            
-            if (model.value) {
-                cell.dataMonitorDataTF.text = [NSString valueFromIntDecUnit:model.decimalBit value:model.value unit:model.unit];
-            }else{
-                cell.dataMonitorDataTF.text = @"NULL";
-            }
-            __weak typeof(self) weakSelf = self;
-            cell.block_timerstart = ^{
-                [weakSelf.timer setFireDate:[NSDate date]];
-            };
-            cell.block_timerpause = ^{
-                [weakSelf.timer setFireDate:[NSDate distantFuture]];
-                
-            };
-            cell.block = ^(NSString *fieldText) {
-                
-                for (int i = 0;i < _controledMonitors.count;i++) {
-                    controledMonitorModel *conModel = _controledMonitors[i];
-                    if ([model.streamId isEqualToString:conModel.streamId]) {
-                        [_controledMonitors removeObject:conModel];
-                    }
-                }
-                
-                 if ([model.bindDeviceType isEqualToString:@"MODBUS"]){
-                    if ([model.protocol isEqualToString:@"RTU"]) {
-                        /**
-                         *modbus_RTU控制
-                         */
-                        NSMutableString *frame = [NSMutableString stringWithFormat:@""];
-                        [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
-                        if ([model.modbusCode intValue] == 01) {
-                            [frame appendFormat:@"%@",[NSString HexByInt:05]];
-                        }else{
-                            [frame appendFormat:@"%@",[NSString HexByInt:06]];
-                        }
-                        [frame appendFormat:@"%@",[NSString HexByLong:[model.modbusRegisterAdd longValue]]];
-                        [frame appendFormat:@"%@",[NSString HexByTextFieldFloat:fieldText decimal:[model.decimalBit intValue]]];
-                        [frame appendFormat:@"%@",[NSString crcFromFrame:frame]];
-                        NSLog(@"%@",frame);
-                        
-                        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-                        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-                        [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
-                        
-                        NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"RTU",@"streamId":model.streamId};
-                        
-                        NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
-                        url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
-                        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-                        
-                        //重发机制
-                        controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
-                        conModel.streamId = model.streamId;
-                        conModel.modifyValue = [NSNumber numberWithInt:[NSString fieldText2long:fieldText decimal:[model.decimalBit intValue]]];
-                        conModel.judgeNum = 3;
-                        [_controledMonitors addObject:conModel];
-                        
-                        [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
-                         {
-                             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-                             NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
-                             NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-                             NSLog(@"success:%@",daetr);
-                             
-                         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                             NSLog(@"Error:%@",error);
-                         }];
-                    }else if ([model.protocol isEqualToString:@"ASCII"]){
-                        /**
-                         *modbus_ASCII控制
-                         */
-                        NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
-                        [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
-                        if ([model.modbusCode intValue] == 01) {
-                            [frame appendFormat:@"%@",[NSString HexByInt:05]];
-                        }else{
-                            [frame appendFormat:@"%@",[NSString HexByInt:06]];
-                        }
-                        [frame appendFormat:@"%@",[NSString HexByLong:[model.modbusRegisterAdd longValue]]];
-                        [frame appendFormat:@"%@",[NSString HexByTextFieldFloat:fieldText decimal:[model.decimalBit intValue]]];
-                        [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
-                        [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
-                        NSLog(@"%@",frame);
-                        
-                        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-                        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-                        [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
-                        
-                        NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
-                        
-                        NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
-                        url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
-                        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-                        
-                        //重发机制
-                        controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
-                        conModel.streamId = model.streamId;
-                        conModel.modifyValue = [NSNumber numberWithInt:[NSString fieldText2long:fieldText decimal:[model.decimalBit intValue]]];
-                        conModel.judgeNum = 3;
-                        [_controledMonitors addObject:conModel];
-                        
-                        [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
-                         {
-                             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-                             NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
-                             NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-                             NSLog(@"success:%@",daetr);
-                            
-                         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                             NSLog(@"Error:%@",error);
-                         }];
-                    }
-                }
-            };
-            return cell;
-        }
     }
-    DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
     
+//    if ([model.writeRead intValue] == 0) {
+//        if ([model.dataType intValue] == 1){
+//            DatapointBitCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBIt];
+//            cell.dataMonitorName.text = model.streamName;
+//
+//            if ([[FarmDatabase shareInstance].auth isEqualToNumber:[NSNumber numberWithInt:4]]) {
+//                //判断用户对这个网关的权限
+//                cell.dataMonitorSwitch.enabled = NO;
+//            }
+//
+//            if ([model.bindDeviceType isEqualToString:@"local"]){
+//                if ([model.value intValue]) {
+//                    cell.dataMonitorSwitch.on = YES;
+//                }else{
+//                    cell.dataMonitorSwitch.on = NO;
+//                }
+//            }else{
+//                if ([model.value intValue] % 2) {
+//                    cell.dataMonitorSwitch.on = YES;
+//                }else{
+//                    cell.dataMonitorSwitch.on = NO;
+//                }
+//            }
+//            cell.dataMonitorSwitch.enabled = NO;
+//            return cell;
+//        }else if ([model.dataType intValue] == 0){
+//            DatapointBit16_32Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBit16_32];
+//            cell.dataMonitorName.text = model.streamName;
+//            if (model.value) {
+//                cell.dataMonitorDataTF.text = [NSString valueFromIntDecUnit:model.decimalBit value:model.value unit:model.unit];
+//            }else{
+//                cell.dataMonitorDataTF.text = @"NULL";
+//            }
+//            cell.dataMonitorDataTF.enabled = NO;
+//            return cell;
+//        }else{
+//            DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
+//            cell.deviceName.text = model.streamName;
+//            if (model.value) {
+//                cell.monitorData.text = [NSString valueFromIntDecUnit:model.decimalBit value:model.value unit:model.unit];
+//            }else{
+//                cell.monitorData.text = @"NULL";
+//            }
+//            return cell;
+//        }
+//
+//    }else if ([model.dataType intValue] == 1){
+//        DatapointBitCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBIt];
+//        cell.dataMonitorName.text = model.streamName;
+//        if ([model.bindDeviceType isEqualToString:@"local"]){
+//            if ([model.value intValue]) {
+//                cell.dataMonitorSwitch.on = YES;
+//            }else{
+//                cell.dataMonitorSwitch.on = NO;
+//            }
+//        }else{
+//            if ([model.value intValue] % 2) {
+//                cell.dataMonitorSwitch.on = YES;
+//            }else{
+//                cell.dataMonitorSwitch.on = NO;
+//            }
+//        }
+//
+//        cell.block = ^(BOOL isOn) {
+//
+//            //如果之前控制的监控点还在重发，直接终止
+//            for (int i = 0;i < _controledMonitors.count;i++) {
+//                controledMonitorModel *conModel = _controledMonitors[i];
+//                if ([model.streamId isEqualToString:conModel.streamId]) {
+//                    [_controledMonitors removeObject:conModel];
+//                }
+//            }
+//
+//            if ([model.bindDeviceType isEqualToString:@"local"]) {
+//                /**
+//                 *local_ASCII控制
+//                 */
+//                NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
+//                [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
+//                NSDictionary *localDic = _plcModelJson[@"local"];
+//                NSArray *dataTypeArray = localDic[@"dataType"];
+//                [dataTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                    if ([obj[@"type"] isEqualToString:@"bit"]) {
+//                        [obj[@"register"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                            if ([obj[@"name"] isEqualToString:model.addressType]) {
+//                                if (obj[@"wcode"] && [obj[@"wcode"] isKindOfClass:[NSNumber class]]) {
+//                                    [frame appendFormat:@"%@",[NSString HexByInt:[obj[@"wcode"] intValue]]];
+//                                    long address = [obj[@"start"] intValue] + [model.address intValue];
+//                                    [frame appendFormat:@"%@",[NSString HexByLong:address]];
+//                                }
+//                            }
+//                        }];
+//                    }
+//                }];
+//                if (isOn) {
+//                    [frame appendFormat:@"%@",@"FF00"];
+//                }else{
+//                    [frame appendFormat:@"%@",@"0000"];
+//                }
+//                [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
+//                [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
+//                NSLog(@"%@",frame);
+//
+//                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//                [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//                [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
+//
+//                NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
+//
+//                NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
+//                url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
+//                url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+//
+//                //重发机制等
+//                controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
+//                conModel.streamId = model.streamId;
+//                if (isOn) {
+//                    conModel.modifyValue = [NSNumber numberWithInt:1];
+//                }else{
+//                    conModel.modifyValue = [NSNumber numberWithInt:0];
+//                }
+//                conModel.judgeNum = 3;
+//                conModel.resendTime = 0;
+//                conModel.parameters = parameters;
+//                conModel.url = url;
+//                [_controledMonitors addObject:conModel];
+//
+//                [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//                 {
+//                     NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+//                     NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+//                     NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+//
+//
+//                     NSLog(@"success:%@",daetr);
+//                 } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                     NSLog(@"Error:%@",error);
+//                 }];
+//            }else{
+//                /**
+//                 *plc_ASCII控制
+//                 */
+//                NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
+//                [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
+//                NSArray *plcCompanyArray = _plcModelJson[@"plc"];
+//                [plcCompanyArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                    if ([obj[@"company"] isEqualToString:model.bindDeviceType]) {
+//                        NSArray *deviceTypeArray = obj[@"deviceType"];
+//                        [deviceTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                            if ([obj[@"name"] isEqualToString:model.bindDeviceName]) {
+//                                NSArray *dataTypeArray = obj[@"dataType"];
+//                                [dataTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                                    if ([obj[@"type"]isEqualToString:model.dataType]) {
+//                                        NSArray *registerArray = obj[@"register"];
+//                                        [registerArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                                            if ([obj[@"name"] isEqualToString:model.addressType]) {
+//                                                if (obj[@"wcode"] && [obj[@"wcode"] isKindOfClass:[NSNumber class]]) {
+//                                                    [frame appendFormat:@"%@",[NSString HexByInt:[obj[@"wcode"] intValue]]];
+//                                                    if ([obj[@"split"] intValue] == 0) {
+//                                                        long address = [obj[@"start"] intValue] + [model.address intValue];
+//                                                        [frame appendFormat:@"%@",[NSString HexByLong:address]];
+//                                                    }else{
+//                                                        long address = 0;
+//                                                        NSArray *addressArray = obj[@"address"];
+//                                                        NSDictionary *addressDic1 = addressArray[0];
+//                                                        NSDictionary *addressDic2 = addressArray[1];
+//                                                        if ([addressDic1[@"start"] intValue] > [addressDic2[@"start"] intValue]) {
+//                                                            addressDic1 = addressArray[1];
+//                                                            addressDic2 = addressArray[0];
+//                                                        }
+//                                                        if ([model.address intValue] >= [addressDic1[@"length"] intValue]) {
+//                                                            address = [addressDic2[@"start"] intValue] + [model.address intValue] - [addressDic1[@"length"] intValue];
+//                                                            [frame appendFormat:@"%@",[NSString HexByLong:address]];
+//                                                        }else{
+//                                                            address = [addressDic1[@"start"] intValue] + [model.address intValue];
+//                                                            [frame appendFormat:@"%@",[NSString HexByLong:address]];
+//                                                        }
+//                                                    }
+//
+//                                                }
+//
+//                                            }
+//                                        }];
+//                                    }
+//                                }];
+//                            }
+//                        }];
+//                    }
+//                }];
+//                if (isOn) {
+//                    [frame appendFormat:@"%@",@"FF00"];
+//                }else{
+//                    [frame appendFormat:@"%@",@"0000"];
+//                }
+//                [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
+//                [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
+//                NSLog(@"%@",frame);
+//
+//                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//                [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//                [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
+//
+//                NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
+//
+//                NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
+//                url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
+//                url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+//
+//                //重发机制
+//                controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
+//                conModel.streamId = model.streamId;
+//                if (isOn) {
+//                    conModel.modifyValue = [NSNumber numberWithInt:1];
+//                }else{
+//                    conModel.modifyValue = [NSNumber numberWithInt:0];
+//                }
+//                conModel.judgeNum = 3;
+//                conModel.resendTime = 0;
+//                conModel.parameters = parameters;
+//                conModel.url = url;
+//                [_controledMonitors addObject:conModel];
+//
+//                [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//                {
+//                    NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+//                    NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+//                    NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+//
+//
+//
+//                    NSLog(@"success:%@",daetr);
+//                } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                    NSLog(@"Error:%@",error);
+//                }];
+//            }
+//
+//        };
+//        return cell;
+//    }else if ([model.dataType intValue] == 0){
+//        DatapointBit16_32Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBit16_32];
+//        cell.dataMonitorName.text = model.streamName;
+//
+//        if ([[FarmDatabase shareInstance].auth isEqualToNumber:[NSNumber numberWithInt:4]]) {
+//            //判断用户对这个网关的权限
+//            cell.dataMonitorDataTF.enabled = NO;
+//        }
+//
+//        if (model.value) {
+//            cell.dataMonitorDataTF.text = [NSString valueFromIntDecUnit:model.decimalBit value:model.value unit:model.unit];
+//        }else{
+//            cell.dataMonitorDataTF.text = @"NULL";
+//        }
+//        //cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%@",model.value];
+//        __weak typeof(self) weakSelf = self;
+//        cell.block_timerstart = ^{
+//            [weakSelf.timer setFireDate:[NSDate date]];
+//        };
+//        cell.block_timerpause = ^{
+//            [weakSelf.timer setFireDate:[NSDate distantFuture]];
+//
+//        };
+//        cell.block = ^(NSString *fieldText) {
+//
+//            for (int i = 0;i < _controledMonitors.count;i++) {
+//                controledMonitorModel *conModel = _controledMonitors[i];
+//                if ([model.streamId isEqualToString:conModel.streamId]) {
+//                    [_controledMonitors removeObject:conModel];
+//                }
+//            }
+//
+//            if ([model.bindDeviceType isEqualToString:@"local"]) {
+//                /**
+//                 *local_ASCII控制
+//                 */
+//                NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
+//                [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
+//                NSDictionary *localDic = _plcModelJson[@"local"];
+//                NSArray *dataTypeArray = localDic[@"dataType"];
+//                [dataTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                    if ([obj[@"type"] isEqualToString:@"bit"]) {
+//                        [obj[@"register"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                            if ([obj[@"name"] isEqualToString:model.addressType]) {
+//                                if (obj[@"wcode"] && [obj[@"wcode"] isKindOfClass:[NSNumber class]]) {
+//                                    [frame appendFormat:@"%@",[NSString HexByInt:[obj[@"wcode"] intValue]]];
+//                                    long address = [obj[@"start"] intValue] + [model.address intValue];
+//                                    [frame appendFormat:@"%@",[NSString HexByLong:address]];
+//                                }
+//                            }
+//                        }];
+//                    }
+//                }];
+//                [frame appendFormat:@"%@",[NSString HexByTextFieldFloat:fieldText decimal:[model.decimalBit intValue]]];
+//                [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
+//                [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
+//                NSLog(@"%@",frame);
+//
+//                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//                [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//                [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
+//
+//                NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
+//
+//                NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
+//                url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
+//                url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+//
+//                //重发机制
+//                controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
+//                conModel.streamId = model.streamId;
+//                conModel.modifyValue = [NSNumber numberWithInt:[NSString fieldText2long:fieldText decimal:[model.decimalBit intValue]]];
+//                conModel.judgeNum = 3;
+//                conModel.resendTime = 0;
+//                conModel.parameters = parameters;
+//                conModel.url = url;
+//                [_controledMonitors addObject:conModel];
+//
+//                [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//                 {
+//                     NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+//                     NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+//                     NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+//
+//
+//
+//                     NSLog(@"success:%@",daetr);
+//                 } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                     NSLog(@"Error:%@",error);
+//                 }];
+//            }else{
+//                /**
+//                 *plc_ASCII控制
+//                 */
+//                NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
+//                [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
+//                NSArray *plcCompanyArray = _plcModelJson[@"plc"];
+//                [plcCompanyArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                    if ([obj[@"company"] isEqualToString:model.bindDeviceType]) {
+//                        NSArray *deviceTypeArray = obj[@"deviceType"];
+//                        [deviceTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                            if ([obj[@"name"] isEqualToString:model.bindDeviceName]) {
+//                                NSArray *dataTypeArray = obj[@"dataType"];
+//                                [dataTypeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                                    if ([obj[@"type"]isEqualToString:model.dataType]) {
+//                                        NSArray *registerArray = obj[@"register"];
+//                                        [registerArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                                            if ([obj[@"name"] isEqualToString:model.addressType]) {
+//                                                if (obj[@"wcode"] && [obj[@"wcode"] isKindOfClass:[NSNumber class]]) {
+//                                                    [frame appendFormat:@"%@",[NSString HexByInt:[obj[@"wcode"] intValue]]];
+//                                                    if ([obj[@"split"] intValue] == 0) {
+//                                                        long address = [obj[@"start"] intValue] + [model.address intValue];
+//                                                        [frame appendFormat:@"%@",[NSString HexByLong:address]];
+//                                                    }else{
+//                                                        long address = 0;
+//                                                        NSArray *addressArray = obj[@"address"];
+//                                                        NSDictionary *addressDic1 = addressArray[0];
+//                                                        NSDictionary *addressDic2 = addressArray[1];
+//                                                        if ([addressDic1[@"start"] intValue] > [addressDic2[@"start"] intValue]) {
+//                                                            addressDic1 = addressArray[1];
+//                                                            addressDic2 = addressArray[0];
+//                                                        }
+//                                                        if ([model.address intValue] >= [addressDic1[@"length"] intValue]) {
+//                                                            address = [addressDic2[@"start"] intValue] + [model.address intValue] - [addressDic1[@"length"] intValue];
+//                                                            [frame appendFormat:@"%@",[NSString HexByLong:address]];
+//                                                        }else{
+//                                                            address = [addressDic1[@"start"] intValue] + [model.address intValue];
+//                                                            [frame appendFormat:@"%@",[NSString HexByLong:address]];
+//                                                        }
+//                                                    }
+//
+//                                                }
+//
+//                                            }
+//                                        }];
+//                                    }
+//                                }];
+//                            }
+//                        }];
+//                    }
+//                }];
+//                [frame appendFormat:@"%@",[NSString HexByTextFieldFloat:fieldText decimal:[model.decimalBit intValue]]];
+//                [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
+//                [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
+//                NSLog(@"%@",frame);
+//
+//                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//                [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//                [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
+//
+//                NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
+//
+//                NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
+//                url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
+//                url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+//
+//                //重发机制
+//                controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
+//                conModel.streamId = model.streamId;
+//                conModel.modifyValue = [NSNumber numberWithInt:[NSString fieldText2long:fieldText decimal:[model.decimalBit intValue]]];
+//                conModel.judgeNum = 3;
+//                conModel.resendTime = 0;
+//                conModel.parameters = parameters;
+//                conModel.url = url;
+//                [_controledMonitors addObject:conModel];
+//
+//                [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//                 {
+//                     NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+//                     NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+//                     NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+//                     NSLog(@"success:%@",daetr);
+//
+//
+//
+//                 } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                     NSLog(@"Error:%@",error);
+//                 }];
+//            }
+//        };
+//
+//        return cell;
+//    }else if ([model.dataType intValue] == 2){
+//        if ([model.modbusCode intValue] == 01) {
+//            DatapointBitCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBIt];
+//            cell.dataMonitorName.text = model.streamName;
+//
+//            if ([[FarmDatabase shareInstance].auth isEqualToNumber:[NSNumber numberWithInt:4]]) {
+//                //判断用户对这个网关的权限
+//                cell.dataMonitorSwitch.enabled = NO;
+//            }
+//
+//            if (model.value) {
+//                cell.dataMonitorSwitch.on = YES;
+//            }else{
+//                cell.dataMonitorSwitch.on = NO;
+//            }
+//            cell.block = ^(BOOL isOn) {
+//
+//                for (int i = 0;i < _controledMonitors.count;i++) {
+//                    controledMonitorModel *conModel = _controledMonitors[i];
+//                    if ([model.streamId isEqualToString:conModel.streamId]) {
+//                        [_controledMonitors removeObject:conModel];
+//                    }
+//                }
+//
+//                if ([model.bindDeviceType isEqualToString:@"MODBUS"]){
+//                    if ([model.protocol isEqualToString:@"RTU"]) {
+//                        /**
+//                         *modbus_RTU控制
+//                         */
+//                        NSMutableString *frame = [NSMutableString stringWithFormat:@""];
+//                        [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
+//                        if ([model.modbusCode intValue] == 01) {
+//                            [frame appendFormat:@"%@",[NSString HexByInt:05]];
+//                        }else{
+//                            [frame appendFormat:@"%@",[NSString HexByInt:06]];
+//                        }
+//                        [frame appendFormat:@"%@",[NSString HexByLong:[model.modbusRegisterAdd longValue]]];
+//                        if (isOn) {
+//                            [frame appendFormat:@"%@",@"FF00"];
+//                        }else{
+//                            [frame appendFormat:@"%@",@"0000"];
+//                        }
+//                        [frame appendFormat:@"%@",[NSString crcFromFrame:frame]];
+//                        NSLog(@"%@",frame);
+//
+//                        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//                        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//                        [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
+//
+//                        NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"RTU",@"streamId":model.streamId};
+//
+//                        NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
+//                        url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
+//                        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+//
+//                        //重发机制
+//                        controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
+//                        conModel.streamId = model.streamId;
+//                        if (isOn) {
+//                            conModel.modifyValue = [NSNumber numberWithInt:1];
+//                        }else{
+//                            conModel.modifyValue = [NSNumber numberWithInt:0];
+//                        }
+//                        conModel.judgeNum = 3;
+//                        conModel.resendTime = 0;
+//                        conModel.parameters = parameters;
+//                        conModel.url = url;
+//                        [_controledMonitors addObject:conModel];
+//
+//                        [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//                         {
+//                             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+//                             NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+//                             NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+//
+//
+//
+//                             NSLog(@"success:%@",daetr);
+//                         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                             NSLog(@"Error:%@",error);
+//                         }];
+//                    }else if ([model.protocol isEqualToString:@"ASCII"]){
+//                        /**
+//                         *modbus_ASCII控制
+//                         */
+//                        NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
+//                        [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
+//                        if ([model.modbusCode intValue] == 01) {
+//                            [frame appendFormat:@"%@",[NSString HexByInt:05]];
+//                        }else{
+//                            [frame appendFormat:@"%@",[NSString HexByInt:06]];
+//                        }
+//                        [frame appendFormat:@"%@",[NSString HexByLong:[model.modbusRegisterAdd longValue]]];
+//                        if (isOn) {
+//                            [frame appendFormat:@"%@",@"FF00"];
+//                        }else{
+//                            [frame appendFormat:@"%@",@"0000"];
+//                        }
+//                        [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
+//                        [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
+//                        NSLog(@"%@",frame);
+//
+//                        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//                        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//                        [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
+//
+//                        NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
+//
+//                        NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
+//                        url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
+//                        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+//
+//                        //重发机制
+//                        controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
+//                        conModel.streamId = model.streamId;
+//                        if (isOn) {
+//                            conModel.modifyValue = [NSNumber numberWithInt:1];
+//                        }else{
+//                            conModel.modifyValue = [NSNumber numberWithInt:0];
+//                        }
+//                        conModel.judgeNum = 3;
+//                        conModel.resendTime = 0;
+//                        conModel.parameters = parameters;
+//                        conModel.url = url;
+//                        [_controledMonitors addObject:conModel];
+//
+//                        [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//                         {
+//                             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+//                             NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+//                             NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+//                             NSLog(@"success:%@",daetr);
+//
+//
+//
+//                         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                             NSLog(@"Error:%@",error);
+//                         }];
+//                    }
+//                }
+//
+//            };
+//            return cell;
+//        }else{
+//            DatapointBit16_32Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBit16_32];
+//            cell.dataMonitorName.text = model.streamName;
+//
+//            if ([[FarmDatabase shareInstance].auth isEqualToNumber:[NSNumber numberWithInt:4]]) {
+//                //判断用户对这个网关的权限
+//                cell.dataMonitorDataTF.enabled = NO;
+//            }
+//
+//            if (model.value) {
+//                cell.dataMonitorDataTF.text = [NSString valueFromIntDecUnit:model.decimalBit value:model.value unit:model.unit];
+//            }else{
+//                cell.dataMonitorDataTF.text = @"NULL";
+//            }
+//            __weak typeof(self) weakSelf = self;
+//            cell.block_timerstart = ^{
+//                [weakSelf.timer setFireDate:[NSDate date]];
+//            };
+//            cell.block_timerpause = ^{
+//                [weakSelf.timer setFireDate:[NSDate distantFuture]];
+//
+//            };
+//            cell.block = ^(NSString *fieldText) {
+//
+//                for (int i = 0;i < _controledMonitors.count;i++) {
+//                    controledMonitorModel *conModel = _controledMonitors[i];
+//                    if ([model.streamId isEqualToString:conModel.streamId]) {
+//                        [_controledMonitors removeObject:conModel];
+//                    }
+//                }
+//
+//                 if ([model.bindDeviceType isEqualToString:@"MODBUS"]){
+//                    if ([model.protocol isEqualToString:@"RTU"]) {
+//                        /**
+//                         *modbus_RTU控制
+//                         */
+//                        NSMutableString *frame = [NSMutableString stringWithFormat:@""];
+//                        [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
+//                        if ([model.modbusCode intValue] == 01) {
+//                            [frame appendFormat:@"%@",[NSString HexByInt:05]];
+//                        }else{
+//                            [frame appendFormat:@"%@",[NSString HexByInt:06]];
+//                        }
+//                        [frame appendFormat:@"%@",[NSString HexByLong:[model.modbusRegisterAdd longValue]]];
+//                        [frame appendFormat:@"%@",[NSString HexByTextFieldFloat:fieldText decimal:[model.decimalBit intValue]]];
+//                        [frame appendFormat:@"%@",[NSString crcFromFrame:frame]];
+//                        NSLog(@"%@",frame);
+//
+//                        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//                        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//                        [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
+//
+//                        NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"RTU",@"streamId":model.streamId};
+//
+//                        NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
+//                        url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
+//                        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+//
+//                        //重发机制
+//                        controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
+//                        conModel.streamId = model.streamId;
+//                        conModel.modifyValue = [NSNumber numberWithInt:[NSString fieldText2long:fieldText decimal:[model.decimalBit intValue]]];
+//                        conModel.judgeNum = 3;
+//                        [_controledMonitors addObject:conModel];
+//
+//                        [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//                         {
+//                             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+//                             NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+//                             NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+//                             NSLog(@"success:%@",daetr);
+//
+//                         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                             NSLog(@"Error:%@",error);
+//                         }];
+//                    }else if ([model.protocol isEqualToString:@"ASCII"]){
+//                        /**
+//                         *modbus_ASCII控制
+//                         */
+//                        NSMutableString *frame = [NSMutableString stringWithFormat:@":"];
+//                        [frame appendFormat:@"%@",[NSString HexByInt:[model.slaveAdr intValue]]];
+//                        if ([model.modbusCode intValue] == 01) {
+//                            [frame appendFormat:@"%@",[NSString HexByInt:05]];
+//                        }else{
+//                            [frame appendFormat:@"%@",[NSString HexByInt:06]];
+//                        }
+//                        [frame appendFormat:@"%@",[NSString HexByLong:[model.modbusRegisterAdd longValue]]];
+//                        [frame appendFormat:@"%@",[NSString HexByTextFieldFloat:fieldText decimal:[model.decimalBit intValue]]];
+//                        [frame appendFormat:@"%@",[NSString lrcFromFrame:frame]];
+//                        [frame appendFormat:@"%@",[NSString stringWithFormat:@"\r\n"]];
+//                        NSLog(@"%@",frame);
+//
+//                        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//                        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//                        [manager.requestSerializer setValue:[FarmDatabase shareInstance].apiKey forHTTPHeaderField:@"api-key"];
+//
+//                        NSDictionary *parameters = @{@"cmmdContent":frame,@"operation":@"write",@"protocol":@"ASCII",@"streamId":model.streamId};
+//
+//                        NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/cmds"];
+//                        url = [url stringByAppendingString:[NSString stringWithFormat:@"?device_id=%@",[FarmDatabase shareInstance].deviceId]];
+//                        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+//
+//                        //重发机制
+//                        controledMonitorModel *conModel = [[controledMonitorModel alloc] init];
+//                        conModel.streamId = model.streamId;
+//                        conModel.modifyValue = [NSNumber numberWithInt:[NSString fieldText2long:fieldText decimal:[model.decimalBit intValue]]];
+//                        conModel.judgeNum = 3;
+//                        [_controledMonitors addObject:conModel];
+//
+//                        [manager POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//                         {
+//                             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+//                             NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+//                             NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+//                             NSLog(@"success:%@",daetr);
+//
+//                         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                             NSLog(@"Error:%@",error);
+//                         }];
+//                    }
+//                }
+//            };
+//            return cell;
+//        }
+//    }
+    
+    
+    DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
     return cell;
 }
 

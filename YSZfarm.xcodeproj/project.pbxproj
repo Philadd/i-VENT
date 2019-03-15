@@ -14,6 +14,7 @@
 		36002BA72238AA44008F42D0 /* NameTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36002B9F2238AA43008F42D0 /* NameTFCell.m */; };
 		3660A0492230EF3F006DD509 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3660A0482230EF3F006DD509 /* LoginViewController.m */; };
 		3660A04C2230EF61006DD509 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3660A04B2230EF61006DD509 /* RegisterViewController.m */; };
+		36FF0EE3223A5B2A0042E066 /* DatapointButtonFFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36FF0EE2223A5B2A0042E066 /* DatapointButtonFFCell.m */; };
 		3E23399F1F8DF94900358219 /* LCMD5Tool.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E23399E1F8DF94900358219 /* LCMD5Tool.m */; };
 		3E35DCBF1F31D8280084D51D /* SwitcherTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E35DCBD1F31D8280084D51D /* SwitcherTableViewCell.m */; };
 		3E35DCC01F31D8280084D51D /* SwitcherTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E35DCBE1F31D8280084D51D /* SwitcherTableViewCell.xib */; };
@@ -240,6 +241,8 @@
 		3660A04A2230EF61006DD509 /* RegisterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RegisterViewController.h; path = ../../../../../Documents/RegisterViewController.h; sourceTree = "<group>"; };
 		3660A04B2230EF61006DD509 /* RegisterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RegisterViewController.m; path = ../../../../../Documents/RegisterViewController.m; sourceTree = "<group>"; };
 		36FEB52C21EF0BC7007618A5 /* EZOpenSDKFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EZOpenSDKFramework.framework; path = YSZfarm/EZOpenSDK/EZOpenSDKFramework.framework; sourceTree = "<group>"; };
+		36FF0EE1223A5B2A0042E066 /* DatapointButtonFFCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatapointButtonFFCell.h; sourceTree = "<group>"; };
+		36FF0EE2223A5B2A0042E066 /* DatapointButtonFFCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DatapointButtonFFCell.m; sourceTree = "<group>"; };
 		3E23399D1F8DF94900358219 /* LCMD5Tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCMD5Tool.h; sourceTree = "<group>"; };
 		3E23399E1F8DF94900358219 /* LCMD5Tool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCMD5Tool.m; sourceTree = "<group>"; };
 		3E35DCBC1F31D8280084D51D /* SwitcherTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitcherTableViewCell.h; sourceTree = "<group>"; };
@@ -1397,6 +1400,8 @@
 				3E9E020D1FF0D7EB006DA0FE /* DevieceDataCell.m */,
 				BB0DA44020118BC000ECD8CF /* DatapointBitCell.h */,
 				BB0DA44120118BC000ECD8CF /* DatapointBitCell.m */,
+				36FF0EE1223A5B2A0042E066 /* DatapointButtonFFCell.h */,
+				36FF0EE2223A5B2A0042E066 /* DatapointButtonFFCell.m */,
 				BB0DA44320118BDF00ECD8CF /* DatapointBit16_32Cell.h */,
 				BB0DA44420118BDF00ECD8CF /* DatapointBit16_32Cell.m */,
 				BB5DCD98205CFE2E00095D71 /* UnusualTableViewCell.h */,
@@ -1687,6 +1692,7 @@
 				BBA523F920464FD6009A3A89 /* DeviceInfoExtendCell.m in Sources */,
 				BB5C0AFE20522507002C1415 /* BindDeviceTableViewCell.m in Sources */,
 				3E4221E01F2EC27100DBE557 /* AFURLSessionManager.m in Sources */,
+				36FF0EE3223A5B2A0042E066 /* DatapointButtonFFCell.m in Sources */,
 				3E4221E41F2EC27100DBE557 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				3E4221DC1F2EC27100DBE557 /* AFNetworkReachabilityManager.m in Sources */,
 				BB0F9165200CAC840060D287 /* AppDelegate.m in Sources */,

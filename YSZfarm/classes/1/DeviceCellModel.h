@@ -12,18 +12,18 @@
 @property (nonatomic) BOOL isUnusual;
 
 @property (nonatomic,strong) NSString *sn;
-@property (nonatomic,strong) NSString *dataType;
 @property (nonatomic,strong) NSString *unit;
 @property (nonatomic,strong) NSString *addressType;
 @property (nonatomic,strong) NSString *streamId;
 @property (nonatomic,strong) NSString *streamUid;
 @property (nonatomic,strong) NSString *streamName;
-@property (nonatomic,strong) NSString *writeRead;
 @property (nonatomic,strong) NSString *desc;
 @property (nonatomic,strong) NSNumber *state;
 @property (nonatomic,strong) NSNumber *value;
 @property (nonatomic,strong) NSNumber *intBit;
 @property (nonatomic,strong) NSNumber *decimalBit;
+@property (nonatomic,strong) NSNumber *writeRead;
+@property (nonatomic,strong) NSNumber *dataType;
 
 
 

@@ -50,6 +50,9 @@
 
 #define yHttpTimeoutInterval 6.f
 #define yColor_back @"F0EFF5"
+
+#define viewWidth self.contentView.frame.size.width
+#define viewHeight self.contentView.frame.size.height
 //#define yColor_back @"5C5E66"
 
 #endif /* YSZfarm_Prefix_pch */

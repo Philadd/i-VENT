@@ -94,23 +94,23 @@ static int apiKeyArrayCount = 0;
             [[dic objectForKey:@"data"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 SectionModel *model = [[SectionModel alloc] init];
                 model.groupName = J2String([obj objectForKey:@"groupName"]);
-                model.deviceGroupId = J2String(obj[@"deviceGroupId"]);
-                NSLog(@"组%@", model.groupName);
-                NSLog(@"设备%@", model.deviceGroupId);
+                model.deviceGroupId = J2String(obj[@"groupId"]);
                 NSMutableArray *array = [[NSMutableArray alloc] init];
                 [obj[@"devices"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     CellModel *cell = [[CellModel alloc] init];
-                    if (obj[@"title"]) {
-                        cell.title = J2String(obj[@"title"]);
-                    }
                     if (obj[@"sn"]) {
                         cell.sn = J2String(obj[@"sn"]);
+                        NSLog(@"sn%@",cell.sn);
                     }
                     if (obj[@"deviceId"]) {
                         cell.deviceId = J2String(obj[@"deviceId"]);
+                        NSLog(@"deviceId%@",cell.deviceId);
                     }
-                    if (obj[@"connectType"]) {
-                        cell.connectType = J2String(obj[@"connectType"]);
+                    if (obj[@"name"]) {
+                        cell.title = J2String(obj[@"name"]);
+                    }
+                    if (obj[@"online"]) {
+                        cell.online = (obj[@"online"]);
                     }
                     if (obj[@"apiKey"]) {
                         cell.apiKey = J2String(obj[@"apiKey"]);
@@ -141,10 +141,9 @@ static int apiKeyArrayCount = 0;
         
         NSMutableArray *onenetDevicesArray = [[NSMutableArray alloc] init];
         apiKeyArrayCount = 0;
-        NSLog(@"key %@",_apiKeyArray);
         
         if (_apiKeyArray.count > 0 ) {
-            NSLog(@"我是谁");
+         
             for (int i = 0; i < _apiKeyArray.count; i++) {
                 NSString *apiKey = _apiKeyArray[i];
                 AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -323,10 +322,10 @@ static int apiKeyArrayCount = 0;
                     
                     AFHTTPSessionManager *manager1 = [AFHTTPSessionManager manager];
                     [manager1.requestSerializer setValue:cell.apiKey forHTTPHeaderField:@"api-key"];
-                    NSString *url = [NSString stringWithFormat:@"http://api.heclouds.com/devices/datapoints"];
+                    NSString *Url = [NSString stringWithFormat:@"http://api.heclouds.com/devices/datapoints"];
                     NSDictionary *parameters = @{@"devIds":cell.deviceId};
-                    url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-                    [manager1 GET:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                    Url = [Url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+                    [manager1 GET:Url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                         NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
                         [[FarmDatabase shareInstance] setDeviceDicOnenet:responseDic];
                         NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
@@ -338,20 +337,23 @@ static int apiKeyArrayCount = 0;
                     
                     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
                     [manager.requestSerializer setValue:cell.sn forHTTPHeaderField:@"sn"];
-                    [manager GET:@"http://rijin.thingcom.com:80/api/v1/relation/netgate/streams" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                    NSString *url = [NSString stringWithFormat:@"http://rijin.thingcom.com:80/api/v1/relation/netgate/streams?sn=%@",cell.sn];
+                    url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+                    
+                    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                         NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
                         NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
                         NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
                         NSLog(@"success:%@",daetr);
                         
                         [[FarmDatabase shareInstance] setDeviceDic:responseDic];
+                        
                         DeviceDetailVIewController *detailVC = [[DeviceDetailVIewController alloc]init];
                         [FarmDatabase shareInstance].deviceId = cell.deviceId;
                         [FarmDatabase shareInstance].apiKey = cell.apiKey;
                         [FarmDatabase shareInstance].sn = cell.sn;
                         [FarmDatabase shareInstance].auth = cell.auth;
                         [FarmDatabase shareInstance].online = cell.online;
-                        [FarmDatabase shareInstance].connectType = cell.connectType;
                         [self.navigationController pushViewController:detailVC animated:YES];
                     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                         NSLog(@"Error:%@",error);
