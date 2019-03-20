@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		297BBD6F2D8A944C489AE8B9 /* libPods-YSZfarm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E8F41C656EEA5AB3B1A0ACF /* libPods-YSZfarm.a */; };
-		36002BA42238AA44008F42D0 /* PhoneVerityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36002B9C2238AA43008F42D0 /* PhoneVerityCell.m */; };
-		36002BA52238AA44008F42D0 /* PhoneTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36002B9D2238AA43008F42D0 /* PhoneTFCell.m */; };
-		36002BA62238AA44008F42D0 /* PasswordTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36002B9E2238AA43008F42D0 /* PasswordTFCell.m */; };
-		36002BA72238AA44008F42D0 /* NameTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36002B9F2238AA43008F42D0 /* NameTFCell.m */; };
 		3660A0492230EF3F006DD509 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3660A0482230EF3F006DD509 /* LoginViewController.m */; };
 		3660A04C2230EF61006DD509 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3660A04B2230EF61006DD509 /* RegisterViewController.m */; };
+		36770F83223F484E0013A6E1 /* PasswordTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36770F7B223F484E0013A6E1 /* PasswordTFCell.m */; };
+		36770F84223F484E0013A6E1 /* PhoneTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36770F7E223F484E0013A6E1 /* PhoneTFCell.m */; };
+		36770F85223F484E0013A6E1 /* PhoneVerityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36770F81223F484E0013A6E1 /* PhoneVerityCell.m */; };
+		36770F86223F484E0013A6E1 /* NameTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36770F82223F484E0013A6E1 /* NameTFCell.m */; };
 		36FF0EE3223A5B2A0042E066 /* DatapointButtonFFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36FF0EE2223A5B2A0042E066 /* DatapointButtonFFCell.m */; };
 		3E23399F1F8DF94900358219 /* LCMD5Tool.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E23399E1F8DF94900358219 /* LCMD5Tool.m */; };
 		3E35DCBF1F31D8280084D51D /* SwitcherTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E35DCBD1F31D8280084D51D /* SwitcherTableViewCell.m */; };
@@ -228,18 +228,18 @@
 
 /* Begin PBXFileReference section */
 		3234DEBE2F43E013B55CF160 /* Pods-YSZfarm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YSZfarm.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YSZfarm/Pods-YSZfarm.debug.xcconfig"; sourceTree = "<group>"; };
-		36002B9C2238AA43008F42D0 /* PhoneVerityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhoneVerityCell.m; path = YSZfarm/classes/1/PhoneVerityCell.m; sourceTree = SOURCE_ROOT; };
-		36002B9D2238AA43008F42D0 /* PhoneTFCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhoneTFCell.m; path = YSZfarm/classes/1/PhoneTFCell.m; sourceTree = SOURCE_ROOT; };
-		36002B9E2238AA43008F42D0 /* PasswordTFCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasswordTFCell.m; path = YSZfarm/classes/1/PasswordTFCell.m; sourceTree = SOURCE_ROOT; };
-		36002B9F2238AA43008F42D0 /* NameTFCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NameTFCell.m; path = YSZfarm/classes/1/NameTFCell.m; sourceTree = SOURCE_ROOT; };
-		36002BA02238AA43008F42D0 /* PasswordTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasswordTFCell.h; path = YSZfarm/classes/1/PasswordTFCell.h; sourceTree = SOURCE_ROOT; };
-		36002BA12238AA43008F42D0 /* PhoneVerityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhoneVerityCell.h; path = YSZfarm/classes/1/PhoneVerityCell.h; sourceTree = SOURCE_ROOT; };
-		36002BA22238AA44008F42D0 /* PhoneTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhoneTFCell.h; path = YSZfarm/classes/1/PhoneTFCell.h; sourceTree = SOURCE_ROOT; };
-		36002BA32238AA44008F42D0 /* NameTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NameTFCell.h; path = YSZfarm/classes/1/NameTFCell.h; sourceTree = SOURCE_ROOT; };
 		3660A0472230EF3F006DD509 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = ../../../../../Documents/LoginViewController.h; sourceTree = "<group>"; };
 		3660A0482230EF3F006DD509 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = ../../../../../Documents/LoginViewController.m; sourceTree = "<group>"; };
 		3660A04A2230EF61006DD509 /* RegisterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RegisterViewController.h; path = ../../../../../Documents/RegisterViewController.h; sourceTree = "<group>"; };
 		3660A04B2230EF61006DD509 /* RegisterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RegisterViewController.m; path = ../../../../../Documents/RegisterViewController.m; sourceTree = "<group>"; };
+		36770F7B223F484E0013A6E1 /* PasswordTFCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordTFCell.m; sourceTree = "<group>"; };
+		36770F7C223F484E0013A6E1 /* PhoneTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneTFCell.h; sourceTree = "<group>"; };
+		36770F7D223F484E0013A6E1 /* PasswordTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasswordTFCell.h; sourceTree = "<group>"; };
+		36770F7E223F484E0013A6E1 /* PhoneTFCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneTFCell.m; sourceTree = "<group>"; };
+		36770F7F223F484E0013A6E1 /* NameTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameTFCell.h; sourceTree = "<group>"; };
+		36770F80223F484E0013A6E1 /* PhoneVerityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneVerityCell.h; sourceTree = "<group>"; };
+		36770F81223F484E0013A6E1 /* PhoneVerityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneVerityCell.m; sourceTree = "<group>"; };
+		36770F82223F484E0013A6E1 /* NameTFCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameTFCell.m; sourceTree = "<group>"; };
 		36FEB52C21EF0BC7007618A5 /* EZOpenSDKFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EZOpenSDKFramework.framework; path = YSZfarm/EZOpenSDK/EZOpenSDKFramework.framework; sourceTree = "<group>"; };
 		36FF0EE1223A5B2A0042E066 /* DatapointButtonFFCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatapointButtonFFCell.h; sourceTree = "<group>"; };
 		36FF0EE2223A5B2A0042E066 /* DatapointButtonFFCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DatapointButtonFFCell.m; sourceTree = "<group>"; };
@@ -687,14 +687,14 @@
 		36002B9B2238A9E5008F42D0 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				36002BA32238AA44008F42D0 /* NameTFCell.h */,
-				36002B9F2238AA43008F42D0 /* NameTFCell.m */,
-				36002BA02238AA43008F42D0 /* PasswordTFCell.h */,
-				36002B9E2238AA43008F42D0 /* PasswordTFCell.m */,
-				36002BA22238AA44008F42D0 /* PhoneTFCell.h */,
-				36002B9D2238AA43008F42D0 /* PhoneTFCell.m */,
-				36002BA12238AA43008F42D0 /* PhoneVerityCell.h */,
-				36002B9C2238AA43008F42D0 /* PhoneVerityCell.m */,
+				36770F7F223F484E0013A6E1 /* NameTFCell.h */,
+				36770F82223F484E0013A6E1 /* NameTFCell.m */,
+				36770F7D223F484E0013A6E1 /* PasswordTFCell.h */,
+				36770F7B223F484E0013A6E1 /* PasswordTFCell.m */,
+				36770F7C223F484E0013A6E1 /* PhoneTFCell.h */,
+				36770F7E223F484E0013A6E1 /* PhoneTFCell.m */,
+				36770F80223F484E0013A6E1 /* PhoneVerityCell.h */,
+				36770F81223F484E0013A6E1 /* PhoneVerityCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1666,6 +1666,7 @@
 				BB5DCD9A205CFE2E00095D71 /* UnusualTableViewCell.m in Sources */,
 				BB0DA44520118BDF00ECD8CF /* DatapointBit16_32Cell.m in Sources */,
 				3E9E02041FF0D1A6006DA0FE /* DeviceSectionView.m in Sources */,
+				36770F83223F484E0013A6E1 /* PasswordTFCell.m in Sources */,
 				3EC2AE351F2AE5A900705C6C /* TableCell.m in Sources */,
 				3660A0492230EF3F006DD509 /* LoginViewController.m in Sources */,
 				BB37DA46204415500078504A /* AlertViewController.m in Sources */,
@@ -1683,15 +1684,16 @@
 				3E9E020A1FF0D1DF006DA0FE /* DeviceCellModel.m in Sources */,
 				BBB6111720198CB6007FA3D4 /* NSString+Common.m in Sources */,
 				3E4FE4801F274717001DCBE2 /* SecondVIewController.m in Sources */,
+				36770F85223F484E0013A6E1 /* PhoneVerityCell.m in Sources */,
 				BBA523F420464F56009A3A89 /* DeviceInfoCell.m in Sources */,
 				3E5D7FDA1FEBAE2B007C7B81 /* DetailTabViewController.m in Sources */,
-				36002BA62238AA44008F42D0 /* PasswordTFCell.m in Sources */,
 				BB5E6A64204D2291003DABDB /* UIView+Extension.m in Sources */,
 				BB37DA49204425500078504A /* AlertCell.m in Sources */,
 				BB5E6A69204D22A8003DABDB /* WSDatePickerView.m in Sources */,
 				BBA523F920464FD6009A3A89 /* DeviceInfoExtendCell.m in Sources */,
 				BB5C0AFE20522507002C1415 /* BindDeviceTableViewCell.m in Sources */,
 				3E4221E01F2EC27100DBE557 /* AFURLSessionManager.m in Sources */,
+				36770F86223F484E0013A6E1 /* NameTFCell.m in Sources */,
 				36FF0EE3223A5B2A0042E066 /* DatapointButtonFFCell.m in Sources */,
 				3E4221E41F2EC27100DBE557 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				3E4221DC1F2EC27100DBE557 /* AFNetworkReachabilityManager.m in Sources */,
@@ -1705,7 +1707,6 @@
 				BB246640204959EC00EA39AE /* NickNameViewController.m in Sources */,
 				3E4221E31F2EC27100DBE557 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				BB34CCE520513E6900E529A4 /* BindDevicesViewController.m in Sources */,
-				36002BA52238AA44008F42D0 /* PhoneTFCell.m in Sources */,
 				BB601A5820A542CB00C6111B /* PasswordTableViewController.m in Sources */,
 				3E4221E11F2EC27100DBE557 /* AFAutoPurgingImageCache.m in Sources */,
 				3ED73F501FE22D75007A2AD4 /* UISearchBar+Common.m in Sources */,
@@ -1720,7 +1721,6 @@
 				BB24664420495BDB00EA39AE /* NickNameTableViewCell.m in Sources */,
 				3ED73F581FE26E51007A2AD4 /* MapViewController.m in Sources */,
 				3ED73F491FE2294D007A2AD4 /* userButton.m in Sources */,
-				36002BA72238AA44008F42D0 /* NameTFCell.m in Sources */,
 				3E4FE47D1F2746F1001DCBE2 /* MainTableViewController.m in Sources */,
 				3E4FE47A1F2746BC001DCBE2 /* MainViewController.m in Sources */,
 				3E4FE4831F27472A001DCBE2 /* DeviceDetailVIewController.m in Sources */,
@@ -1736,10 +1736,10 @@
 				BB246639204945B700EA39AE /* MMSideDrawerSectionHeaderView.m in Sources */,
 				3E4221DB1F2EC27100DBE557 /* AFHTTPSessionManager.m in Sources */,
 				3E76953F1FEA3C3200E87426 /* CellModel.m in Sources */,
-				36002BA42238AA44008F42D0 /* PhoneVerityCell.m in Sources */,
 				3E4221E91F2EC27100DBE557 /* UIWebView+AFNetworking.m in Sources */,
 				3ED73F411FE21752007A2AD4 /* UITextField+Common.m in Sources */,
 				3E3D95DE1FE913CF00D45494 /* SectionView.m in Sources */,
+				36770F84223F484E0013A6E1 /* PhoneTFCell.m in Sources */,
 				3E4FE4531F274260001DCBE2 /* main.m in Sources */,
 				3EC5192F1F2A133100D2F396 /* DetailTableCell.m in Sources */,
 				3E4221E21F2EC27100DBE557 /* AFImageDownloader.m in Sources */,

@@ -373,36 +373,6 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
     
 }
 
-
-- (void)addDatapointGrounp{
-    [SVProgressHUD show];
-    
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [manager.requestSerializer setValue:[FarmDatabase shareInstance].userId forHTTPHeaderField:@"userId"];
-    
-    NSString *url = [NSString stringWithFormat:@"http://rijin.thingcom.com:80/api/v1/netgate/group"];
-    url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-    
-    [manager POST:url parameters: nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-        NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
-        NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"success:%@",daetr);
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-        });
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"Error:%@",error);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-        });
-    }];
-     
-     
-}
-
 - (void)bindDatapointStatus{
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
