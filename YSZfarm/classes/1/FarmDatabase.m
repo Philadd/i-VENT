@@ -7,7 +7,6 @@
 //
 
 #import "FarmDatabase.h"
-#import "EZCameraInfo.h"
 #import "LCMD5Tool.h"
 
 @interface FarmDatabase()
@@ -57,7 +56,6 @@ static FarmDatabase* _instance = nil;
 - (void)setuserid:(NSString *)userid
 {
     self.userId = userid;
-    //NSLog(@"%d",userid);
 }
 
 - (void)getDeviceData:(void(^)())block{
@@ -78,53 +76,6 @@ static FarmDatabase* _instance = nil;
         }];
         
     }
-}
-
-
-
-#pragma mark -视频accessToken以及cameraInfo本地化处理
-
-- (void)setAccessToken:(NSString *)accessToken cameraInfo:(EZCameraInfo *)cameraInfo{
-    _accessToken = accessToken;
-    _deviceSerial = cameraInfo.deviceSerial;
-    _cameraNo = cameraInfo.cameraNo;
-    _cameraName = cameraInfo.cameraName;
-    NSLog(@"设备信息Data：%@",accessToken);
-    
-    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-    [user setObject:accessToken?:@"" forKey:@"EZOpenSDKAccessToken"];
-    [user setObject:_deviceSerial?:@"" forKey:@"EZOpenSDKDeviceSerial"];
-    [user setObject:_cameraName?:@"" forKey:@"EZOpenSDKCameraName"];
-    [user setInteger:_cameraNo forKey:@"EZOpenSDKCameraNo"];
-    [user synchronize];
-}
-
-- (NSString *)getAccessToken{
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"EZOpenSDKAccessToken"];
-}
-
-- (NSString *)getDeviceSerial{
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"EZOpenSDKDeviceSerial"];
-}
-
-- (NSString *)getCameraName{
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"EZOpenSDKCameraName"];
-}
-
-- (NSInteger)getCameraNo{
-    return [[NSUserDefaults standardUserDefaults] integerForKey:@"EZOpenSDKCameraNo"];
-}
-
-- (void)clearSession{
-    _accessToken = nil;
-    _deviceSerial = nil;
-    _cameraName = nil;
-    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-    [user removeObjectForKey:@"EZOpenSDKAccessToken"];
-    [user removeObjectForKey:@"EZOpenSDKDeviceSerial"];
-    [user removeObjectForKey:@"EZOpenSDKCameraName"];
-    [user removeObjectForKey:@"EZOpenSDKCameraNo"];
-    [user synchronize];
 }
 
 @end

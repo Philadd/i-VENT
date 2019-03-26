@@ -10,7 +10,6 @@
 #import "SettingItem.h"
 #import "GroupItem.h"
 #import "FarmDatabase.h"
-#import "EZOpenSDK.h"
 
 NSString *const FourCellIdentifier = @"cellIDsixth";
 
@@ -84,8 +83,6 @@ NSString *const FourCellIdentifier = @"cellIDsixth";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 1 && indexPath.row == 0) {
-        [[FarmDatabase shareInstance] clearSession];
-        NSLog(@"清理成功");
         /*[EZOpenSDK logout:^(NSError *error) {
             if (error == nil) {
                 NSLog(@"退出成功");

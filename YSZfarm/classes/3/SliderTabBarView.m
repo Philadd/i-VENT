@@ -12,8 +12,6 @@
 #import "FarmDatabase.h"
 #import "SwitcherTableViewCell.h"
 #import "AFHTTPSessionManager.h"
-#import "EZConstants.h"
-#import "EZOpenSDK.h"
 
 
 #define TOPHEIGHT 50
@@ -462,54 +460,4 @@ NSString *const TTTableCellNibName = @"SwitcherTableViewCell";
 - (void)closePtzView{
     _ptzView.hidden = YES;
 }
-
-- (void)ptzControlButtonTouchDown:(id)sender{
-    EZPTZCommand command;
-    if (sender == self.ptzUpBtn) {
-        command = EZPTZCommandUp;
-    }else if (sender == self.ptzDownBtn){
-        command = EZPTZCommandDown;
-    }else if (sender == self.ptzLeftBtn){
-        command = EZPTZCommandLeft;
-    }else{
-        command = EZPTZCommandRight;
-    }
-    [EZOpenSDK controlPTZ:[FarmDatabase shareInstance].deviceSerial
-                 cameraNo:[FarmDatabase shareInstance].cameraNo
-                  command:command
-                   action:EZPTZActionStart
-                    speed:2
-                   result:^(NSError *error) {
-                       //NSLog(@"error is %@", error);
-                   }];
-}
-
-- (void)ptzControlButtonTouchUpInside:(id)sender{
-    EZPTZCommand command;
-    if(sender == self.ptzLeftBtn)
-    {
-        command = EZPTZCommandLeft;
-    }
-    else if (sender == self.ptzDownBtn)
-    {
-        command = EZPTZCommandDown;
-    }
-    else if (sender == self.ptzRightBtn)
-    {
-        command = EZPTZCommandRight;
-    }
-    else {
-        command = EZPTZCommandUp;
-    }
-    [EZOpenSDK controlPTZ:[FarmDatabase shareInstance].deviceSerial
-                 cameraNo:[FarmDatabase shareInstance].cameraNo
-                  command:command
-                   action:EZPTZActionStop
-                    speed:3.0
-                   result:^(NSError *error) {
-                       //NSLog(@"error is %@", error);
-                   }];
-}
-
-
 @end

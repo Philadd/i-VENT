@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 #import "LoginViewController.h"
-#import "EZOpenSDK.h"
 #import <IQKeyboardManager/IQKeyboardManager.h>
 #import <UserNotifications/UserNotifications.h>
 
@@ -45,18 +44,6 @@
     if (!ret) {
         NSLog(@"BMKmanager start failed!");
     }
-    
-    /*
-     *萤石云
-     */
-    [EZOPENSDK initLibWithAppKey:EzvizAppKey];
-    
-    [EZOPENSDK enableP2P:YES];
-    
-    [EZOPENSDK setDebugLogEnable:YES];
-    
-    [EZOPENSDK initPushService];
-    NSLog(@"EZOpenSDK Version = %@", [EZOPENSDK getVersion]);
     
     /*
      *IQKeyboardManager

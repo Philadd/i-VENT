@@ -49,11 +49,5 @@
 + (instancetype)shareInstance;
 - (void)setuserid:(NSString *)userid;
 - (void)getDeviceData:(void(^)())block;
-- (void)clearSession;
-- (NSString *)getAccessToken;
-- (NSString *)getDeviceSerial;
-- (NSInteger)getCameraNo;
-- (NSString *)getCameraName;
-- (void)setAccessToken:(NSString *)accessToken cameraInfo:(EZCameraInfo *)cameraInfo;
 
 @end

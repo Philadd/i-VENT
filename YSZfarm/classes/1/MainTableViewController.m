@@ -14,7 +14,7 @@
 #import "SectionModel.h"
 #import "CellModel.h"
 #import "TouchTableView.h"
-#import "DeviceDetailVIewController.h"
+#import "DetailTabViewController.h"
 #import "UIViewController+MMDrawerController.h"
 
 
@@ -92,21 +92,8 @@ static int apiKeyArrayCount = 0;
         if ([tableView respondsToSelector:@selector(setLayoutMargins:)])  {
             [tableView setLayoutMargins:UIEdgeInsetsZero];
         }
-        /*tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 10, self.myTableView.bounds.size.width, 30)];
-        UILabel *noMoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
-        noMoreLabel.text = @"没有更多了";
-        noMoreLabel.font = [UIFont systemFontOfSize:15];
-        [tableView.tableFooterView addSubview:noMoreLabel];
-        noMoreLabel.center = tableView.tableFooterView.center;*/
         tableView;
     });
-    //分割线全部显示
-    /*if ([self.myTableView respondsToSelector:@selector(setSeparatorInset:)]) {
-     [self.myTableView setSeparatorInset:UIEdgeInsetsZero];
-     }
-     if ([self.myTableView respondsToSelector:@selector(setLayoutMargins:)])  {
-     [self.myTableView setLayoutMargins:UIEdgeInsetsZero];
-     }*/
 
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, searchBarHeight)];
     self.searchBar.placeholder = LocalString(@"搜索");
@@ -248,16 +235,6 @@ static int apiKeyArrayCount = 0;
     return _sectionData;
 }
 #pragma mark - resign keyboard control
-/**
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    [self.searchBar resignFirstResponder];
-    [_searchBar setShowsCancelButton:NO animated:YES];
-    _searchTableView.hidden = YES;
-    [self.myTableView resignFirstResponder];
-    [_searchData removeAllObjects];
-    [_searchTableView reloadData];
-}
-**/
 
 - (BOOL)textFieldShouldReturn:(UITextField*) textField
 {
@@ -367,7 +344,7 @@ static int apiKeyArrayCount = 0;
                 
                 [[FarmDatabase shareInstance] setDeviceDic:responseDic];
                 
-                DeviceDetailVIewController *detailVC = [[DeviceDetailVIewController alloc]init];
+                DetailTabViewController *detailVC = [[DetailTabViewController alloc]init];
                 [FarmDatabase shareInstance].deviceId = cell.deviceId;;
                 [FarmDatabase shareInstance].apiKey = cell.apiKey;
                 [FarmDatabase shareInstance].sn = cell.sn;
@@ -422,7 +399,7 @@ static int apiKeyArrayCount = 0;
             NSLog(@"success:%@",daetr);
             
             [[FarmDatabase shareInstance] setDeviceDic:responseDic];
-            DeviceDetailVIewController *detailVC = [[DeviceDetailVIewController alloc]init];
+            DetailTabViewController *detailVC = [[DetailTabViewController alloc]init];
             [FarmDatabase shareInstance].deviceId = cell.deviceId;
             [FarmDatabase shareInstance].apiKey = cell.apiKey;
             [FarmDatabase shareInstance].sn = cell.sn;
@@ -474,8 +451,6 @@ static int apiKeyArrayCount = 0;
 #pragma mark - datapoint alarm
 
 - (void)datapointAlarm{
-    NSLog(@"adsfsd%@",[FarmDatabase shareInstance].alarmGateway);
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         [_myTableView reloadData];
     });

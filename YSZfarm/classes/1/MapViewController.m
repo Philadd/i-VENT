@@ -12,7 +12,7 @@
 #import "SectionModel.h"
 #import "CellModel.h"
 #import "UIViewController+MMDrawerController.h"
-#import "DeviceDetailVIewController.h"
+#import "DetailTabViewController.h"
 
 
 @interface MapViewController ()<BMKMapViewDelegate,BMKLocationServiceDelegate>
@@ -56,18 +56,18 @@ static int apiKeyArrayCount = 0;
         _annotationArray = [[NSMutableArray alloc] init];
     }
     void(^block)(NSDictionary *) = ^(NSDictionary *dic){
-       [self sectionData:dic];
+        [self sectionData:dic];
         
         //NSLog(@"%@",dic);
     };
     [[FarmDatabase shareInstance] getDeviceData:block];
     
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        usleep(1000 * 1000);
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self loadData];
-//        });
-//    });
+    //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    //        usleep(1000 * 1000);
+    //        dispatch_async(dispatch_get_main_queue(), ^{
+    //            [self loadData];
+    //        });
+    //    });
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -89,7 +89,7 @@ static int apiKeyArrayCount = 0;
             _apiKeyArray = [[NSMutableArray alloc] init];
         }
         _sectionData = [[NSMutableArray alloc]init];
-    
+        
         if ([[dic objectForKey:@"data"] isKindOfClass:[NSArray class]] && [[dic objectForKey:@"data"] count] > 0) {
             [[dic objectForKey:@"data"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 SectionModel *model = [[SectionModel alloc] init];
@@ -143,7 +143,7 @@ static int apiKeyArrayCount = 0;
         apiKeyArrayCount = 0;
         
         if (_apiKeyArray.count > 0 ) {
-         
+            
             for (int i = 0; i < _apiKeyArray.count; i++) {
                 NSString *apiKey = _apiKeyArray[i];
                 AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -277,9 +277,9 @@ static int apiKeyArrayCount = 0;
 }
 
 - (void)mapStatusDidChanged:(BMKMapView *)mapView{
-//    if (mapView.annotations == nil) {
-//        [self loadData];
-//    }
+    //    if (mapView.annotations == nil) {
+    //        [self loadData];
+    //    }
 }
 
 -(void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
@@ -292,7 +292,7 @@ static int apiKeyArrayCount = 0;
     
     _myMapView.centerCoordinate = userLocation.location.coordinate;//让地图的中心位置在这里
     //[_myMapView setCenterCoordinate:userLocation.location.coordinate animated:YES];//出现动画效果
-
+    
     [_myMapView setZoomEnabled:YES];
     [_myMapView setZoomEnabledWithTap:YES];
     
@@ -348,7 +348,7 @@ static int apiKeyArrayCount = 0;
                         
                         [[FarmDatabase shareInstance] setDeviceDic:responseDic];
                         
-                        DeviceDetailVIewController *detailVC = [[DeviceDetailVIewController alloc]init];
+                        DetailTabViewController *detailVC = [[DetailTabViewController alloc]init];
                         [FarmDatabase shareInstance].deviceId = cell.deviceId;
                         [FarmDatabase shareInstance].apiKey = cell.apiKey;
                         [FarmDatabase shareInstance].sn = cell.sn;

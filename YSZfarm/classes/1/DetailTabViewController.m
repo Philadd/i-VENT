@@ -10,7 +10,6 @@
 #import "DataMonitorView.h"
 #import "AlertViewController.h"
 #import "DeviceInfoViewController.h"
-#import "VideoControlView.h"
 
 @interface DetailTabViewController ()
 @property (nonatomic, strong) NSArray *titleData;
@@ -20,12 +19,12 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    self.view.frame = CGRectMake(0, 200, ScreenWidth, ScreenHeight);
+    self.navigationItem.title = @"设备管理";
 }
 
 - (NSArray *)titleData {
     if (!_titleData) {
-        _titleData = @[@"数据监控",@"报警监控",@"基本信息",@"视频控制"];
+        _titleData = @[@"数据监控",@"报警监控",@"基本信息"];
     }
     return _titleData;
 }
@@ -76,24 +75,11 @@
         }
             break;
             
-        case 3:{
-            VideoControlView *VC3 = [[VideoControlView alloc] init];
-            if (self.block) {
-                VC3.block = ^{
-                    self.block();
-                };
-            }
-            return VC3;
-            
-        }
-            break;
-            
         default:{
             return nil;
         }
             break;
     }
-    
     
 }
 
