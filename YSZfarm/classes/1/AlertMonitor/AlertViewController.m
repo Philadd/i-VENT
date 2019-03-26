@@ -183,8 +183,8 @@ static int searchBarHeight = 40;
         _currentAlertArray = [[NSMutableArray alloc] init];
         
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-        [manager.requestSerializer setValue:[FarmDatabase shareInstance].sn forHTTPHeaderField:@"sn"];
-        [manager GET:@"http://iotapi.thingcom.com:8080/dataPlatform/triggers/current" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [manager.requestSerializer setValue:[FarmDatabase shareInstance].deviceId forHTTPHeaderField:@"id"];
+        [manager GET:@"http://rijin.thingcom.com:80/api/v1/trigger/data/current" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
             _currentAlertArray = responseDic[@"data"];
             [_myTableView reloadData];
@@ -411,7 +411,7 @@ static int searchBarHeight = 40;
             [manager.requestSerializer setValue:[FarmDatabase shareInstance].sn forHTTPHeaderField:@"sn"];
             [manager.requestSerializer setValue:[NSString stringWithFormat:@"%@%@",_startTime.titleLabel.text,@":00"] forHTTPHeaderField:@"startTime"];
             [manager.requestSerializer setValue:[NSString stringWithFormat:@"%@%@",_endTime.titleLabel.text,@":00"] forHTTPHeaderField:@"endTime"];
-            [manager GET:@"http://iotapi.thingcom.com:8080/dataPlatform/triggers/data" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            [manager GET:@"http://rijin.thingcom.com:80/api/v1/trigger/data/history" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                 NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
                 _historyAlertArray = responseDic[@"data"];
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -450,7 +450,7 @@ static int searchBarHeight = 40;
             [manager.requestSerializer setValue:[FarmDatabase shareInstance].sn forHTTPHeaderField:@"sn"];
             [manager.requestSerializer setValue:[NSString stringWithFormat:@"%@%@",_startTime.titleLabel.text,@":00"] forHTTPHeaderField:@"startTime"];
             [manager.requestSerializer setValue:[NSString stringWithFormat:@"%@%@",_endTime.titleLabel.text,@":00"] forHTTPHeaderField:@"endTime"];
-            [manager GET:@"http://iotapi.thingcom.com:8080/dataPlatform/triggers/data" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            [manager GET:@"http://rijin.thingcom.com:80/api/v1/trigger/data/history" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                 NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
                 _historyAlertArray = responseDic[@"data"];
                 

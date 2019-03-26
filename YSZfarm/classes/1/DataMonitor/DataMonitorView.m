@@ -125,14 +125,14 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 - (NSMutableArray *)sectionData:(NSDictionary *)dic{
     if (_sectionData == nil) {
         _sectionData = [[NSMutableArray alloc]init];
-          NSLog(@"监控%@",dic);
+        NSLog(@"监控%@",dic);
         if ([[dic objectForKey:@"data"] isKindOfClass:[NSArray class]] && [[dic objectForKey:@"data"] count] > 0) {
             [[dic objectForKey:@"data"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 DeviceSectionModel *model = [[DeviceSectionModel alloc] init];
                 model.deviceGroupName = J2String([obj objectForKey:@"name"]);
                 model.datapointGroupUid = J2String([obj objectForKey:@"mac"]);
-                    if (obj[@"mac"] && [obj[@"mac"] isKindOfClass:[NSNumber class]]) {
+                if (obj[@"mac"] && [obj[@"mac"] isKindOfClass:[NSNumber class]]) {
                     model.datapointGroupId = obj[@"mac"];
                 }else{
                     NSLog(@"datapointGroupId不是number类型");
@@ -160,11 +160,11 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     if (obj[@"streamUid"]) {
                         cell.streamUid = J2String(obj[@"streamUid"]);
                     }
-
+                    
                     if (obj[@"desc"]) {
                         cell.desc = J2String(obj[@"desc"]);
                     }
-
+                    
                     if (obj[@"dataType"]) {
                         cell.dataType = J2String(obj[@"dataType"]);
                     }
@@ -309,7 +309,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                 
             }];
         }
-    
+        
     }
     return _sectionData;
     
@@ -335,7 +335,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
     
     NSString *url = [NSString stringWithFormat:@"http://rijin.thingcom.com:80/api/v1/relation/netgate/streams?sn=%@",[FarmDatabase shareInstance].sn];
     url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
-   
+    
     [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
         NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
@@ -474,7 +474,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
             DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
             cell.deviceName.text = model.streamName;
             if (model.value) {
-                cell.monitorData.text = [NSString valueFromIntDecUnit:model.decimalBit value:model.value unit:model.unit];
+                cell.monitorData.text = [NSString stringWithFormat:@"%.6f%@",[model.value floatValue],model.unit];
             }else{
                 cell.monitorData.text = @"NULL";
             }

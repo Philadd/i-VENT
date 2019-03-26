@@ -79,7 +79,7 @@
             break;
             
         case 2:
-            //NSLog(@"%@",[NSString stringWithFormat:@"%.2f%@",[value floatValue],unit]);
+        
             return [NSString stringWithFormat:@"%.2f%@",[value floatValue] / 100,unit];
             break;
             
@@ -92,6 +92,10 @@
             break;
         case 5:
             return [NSString stringWithFormat:@"%.5f%@",[value floatValue] / 100000,unit];
+            break;
+            
+        case 6:
+            return [NSString stringWithFormat:@"%.6f%@",[value floatValue] / 1000000,unit];
             break;
             
         default:
