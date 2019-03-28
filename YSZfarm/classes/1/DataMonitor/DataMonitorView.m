@@ -28,7 +28,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 
 @interface DataMonitorView ()
 @property (nonatomic, strong) UITableView *myTableView;
-@property (nonatomic, strong) UILabel *statusLabel;
+//@property (nonatomic, strong) UILabel *statusLabel;
 
 @property (nonatomic, strong) NSMutableArray *sectionData;
 @property (nonatomic, strong) NSDictionary *plcModelJson;
@@ -42,8 +42,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self viewLayout];
-    //[self plcModelJsonInit];
-    [self bindDatapointStatus];
+    //[self bindDatapointStatus];
     
     _controledMonitors = [[NSMutableArray alloc] init];
     // Do any additional setup after loading the view.
@@ -72,16 +71,16 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 }
 
 - (void)viewLayout{
-    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(1, 0, ScreenWidth-2, 44)];
-    _statusLabel.text = LocalString(@"没有绑定的监控点状态");
-    _statusLabel.textAlignment = NSTextAlignmentCenter;
-    _statusLabel.layer.borderColor = [UIColor blackColor].CGColor;
-    _statusLabel.layer.borderWidth = 1.5f;
-    _statusLabel.layer.cornerRadius = 10.f;
-    [self.view addSubview:_statusLabel];
+//    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(1, 0, ScreenWidth-2, 44)];
+//    _statusLabel.text = LocalString(@"没有绑定的监控点状态");
+//    _statusLabel.textAlignment = NSTextAlignmentCenter;
+//    _statusLabel.layer.borderColor = [UIColor blackColor].CGColor;
+//    _statusLabel.layer.borderWidth = 1.5f;
+//    _statusLabel.layer.cornerRadius = 10.f;
+//    [self.view addSubview:_statusLabel];
     
     _myTableView = ({
-        TouchTableView *tableView = [[TouchTableView alloc] initWithFrame:CGRectMake(0, 44, ScreenWidth, ScreenHeight - 44 - 44 - 20 - 44)];
+        TouchTableView *tableView = [[TouchTableView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight - 44 - 44 - 20 - 44)];
         tableView.backgroundColor = [UIColor clearColor];
         tableView.dataSource = self;
         tableView.delegate = self;
@@ -206,7 +205,6 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     }else{
                         NSLog(@"modbusRegisterAdd不是number类型");
                     }
-                    NSLog(@"我的数据%@",[FarmDatabase shareInstance].deviceDicOnenet);
                     
                     if ([FarmDatabase shareInstance].deviceDicOnenet) {
                         NSArray *onenetDatapoints = [[NSArray alloc] init];
@@ -307,7 +305,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 
 
 - (void)reloadMonitorData{
-    [self bindDatapointStatus];//刷新状态栏
+   // [self bindDatapointStatus];//刷新状态栏
     
     /*
      *在刷新前保存之前表格section的展开状态，
@@ -346,7 +344,6 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
     [manager1 GET:Url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
         [[FarmDatabase shareInstance] setDeviceDicOnenet:responseDic];
-        NSLog(@"niubi%@",responseDic);
         _sectionData = nil;
         [self sectionData:[[FarmDatabase shareInstance] deviceDic]];
         [_sectionData enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -363,8 +360,8 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
     
 }
 
-- (void)bindDatapointStatus{
-    
+/*- (void)bindDatapointStatus{
+
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [manager.requestSerializer setValue:[FarmDatabase shareInstance].sn forHTTPHeaderField:@"sn"];
@@ -407,7 +404,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"Error:%@",error);
     }];
-}
+}*/
 
 #pragma mark - UiTableviewDelegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -418,7 +415,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
     DeviceSectionModel *model = _sectionData[section];
     return model.isExpand?model.cellArray.count + 1:0;
 }
-
+//显示内容细节
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row == 0) {
         DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
@@ -464,7 +461,12 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
             DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
             cell.deviceName.text = model.streamName;
             if (model.value) {
-                cell.monitorData.text = [NSString stringWithFormat:@"%.6f%@",[model.value floatValue],model.unit];
+                if (model.unit) {
+                    cell.monitorData.text = [NSString stringWithFormat:@"%@%@",model.value,model.unit];
+                }else{
+                    cell.monitorData.text = [NSString stringWithFormat:@"%@",model.value];
+                }
+                
             }else{
                 cell.monitorData.text = @"NULL";
             }
@@ -475,7 +477,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
             DatapointBit16_32Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBit16_32];
             cell.dataMonitorName.text = model.streamName;
             if (model.value) {
-                cell.dataMonitorDataTF.text = [NSString valueFromIntDecUnit:model.decimalBit value:model.value unit:model.unit];
+                cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%@%@",model.value,model.unit];
             }else{
                 cell.dataMonitorDataTF.text = @"NULL";
             }
@@ -513,7 +515,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
             DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
             cell.deviceName.text = model.streamName;
             if (model.value) {
-                cell.monitorData.text = [NSString valueFromIntDecUnit:model.decimalBit value:model.value unit:model.unit];
+                cell.monitorData.text = [NSString stringWithFormat:@"%@%@",model.value,model.unit];
             }else{
                 cell.monitorData.text = @"NULL";
             }

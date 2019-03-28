@@ -183,13 +183,26 @@ static int searchBarHeight = 40;
         _currentAlertArray = [[NSMutableArray alloc] init];
         
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-        [manager.requestSerializer setValue:[FarmDatabase shareInstance].deviceId forHTTPHeaderField:@"id"];
-        [manager GET:@"http://rijin.thingcom.com:80/api/v1/trigger/data/current" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        FarmDatabase *db = [FarmDatabase shareInstance];
+        
+        [manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
+        manager.requestSerializer.timeoutInterval = yHttpTimeoutInterval;
+        [manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
+        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        
+        NSString *url = [NSString stringWithFormat:@"http://rijin.thingcom.com:80/api/v1/trigger/data/current?sn=%@",[FarmDatabase shareInstance].sn];
+        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
+        
+        [manager GET: url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
             _currentAlertArray = responseDic[@"data"];
+            
+            [_currentAlertArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                db.alarmId = obj[@"id"];
+            }];
+            
             [_myTableView reloadData];
             [_myTableView.mj_header endRefreshing];
-            NSLog(@"%@",_currentAlertArray);
             
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             NSLog(@"Error:%@",error);
@@ -273,7 +286,6 @@ static int searchBarHeight = 40;
         return cell;
     }else{
         NSDictionary *alertInfoDic = _currentAlertArray[indexPath.row];
-        
         AlertCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_alert];
         if ([alertInfoDic[@"content"] isKindOfClass:[NSString class]]) {
             cell.deviceName.text = alertInfoDic[@"content"];
@@ -320,9 +332,8 @@ static int searchBarHeight = 40;
                 
                 AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
                 [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-                NSDictionary *parameters = @{@"sn":[FarmDatabase shareInstance].sn,@"time":alertInfoDic[@"time"]};
-                
-                [manager PUT:@"http://iotapi.thingcom.com:8080/dataPlatform/triggers/confirm" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+                NSDictionary *parameters = @{@"id":[FarmDatabase shareInstance].alarmId};
+                [manager PUT:@"http://rijin.thingcom.com:80/api/v1/trigger/data/current" parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                  {
                      NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
                      NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];

@@ -8,7 +8,6 @@
 
 #import "MainTableViewController.h"
 #import "FarmDatabase.h"
-#import "FarmDetailViewController.h"
 #import "TableCell.h"
 #import "SectionView.h"
 #import "SectionModel.h"
@@ -46,7 +45,6 @@ static int apiKeyArrayCount = 0;
     [super viewDidLoad];
     
     [self viewLayout];
-
     
 }
 
@@ -150,7 +148,6 @@ static int apiKeyArrayCount = 0;
                     }
                     if (obj[@"deviceId"]) {
                         cell.deviceId = J2String(obj[@"deviceId"]);
-                        NSLog(@"deviceId%@",cell.deviceId);
                     }
                     if (obj[@"name"]) {
                         cell.title = J2String(obj[@"name"]);
@@ -320,8 +317,10 @@ static int apiKeyArrayCount = 0;
             [manager1.requestSerializer setValue:cell.apiKey forHTTPHeaderField:@"api-key"];
             NSString *Url = [NSString stringWithFormat:@"http://api.heclouds.com/devices/datapoints"];
             NSDictionary *parameters = @{@"devIds":cell.deviceId};
+            NSLog(@"我的信息%@ %@",cell.deviceId,cell.apiKey);
             Url = [Url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
             [manager1 GET:Url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                NSLog(@"aadaddasdfgg%@",responseObject);
                 NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
                 [[FarmDatabase shareInstance] setDeviceDicOnenet:responseDic];
                 NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
@@ -380,6 +379,7 @@ static int apiKeyArrayCount = 0;
         NSDictionary *parameters = @{@"devIds":cell.deviceId};
         url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
         [manager1 GET:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSLog(@"%@adaddada",responseObject);
             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
             [[FarmDatabase shareInstance] setDeviceDicOnenet:responseDic];
             NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];

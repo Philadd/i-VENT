@@ -13,6 +13,7 @@
 
 ///@brife 报警网关名称
 @property (strong,nonatomic) NSString *alarmGateway;
+@property (nonatomic,strong) NSNumber *alarmId;
 
 ///@brife 用户信息
 @property (strong,nonatomic) NSString *userId;

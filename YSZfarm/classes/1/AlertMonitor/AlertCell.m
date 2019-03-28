@@ -21,6 +21,7 @@
         if (!_deviceName) {
             _deviceName = [UILabel labelWithFont:[UIFont systemFontOfSize:15.0] textColor:[UIColor blackColor]];
             [self.contentView addSubview:_deviceName];
+            _data.adjustsFontSizeToFitWidth = YES;
             [_deviceName mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(ScreenWidth / 4.0, viewHeight));
                 make.centerY.equalTo(self.contentView.mas_centerY);
@@ -30,6 +31,7 @@
         if (!_status) {
             _status = [UILabel labelWithFont:[UIFont systemFontOfSize:15.0] textColor:[UIColor blackColor]];
             [self.contentView addSubview:_status];
+            _data.adjustsFontSizeToFitWidth = YES;
             [_status mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(ScreenWidth / 4.0, viewHeight));
                 make.centerY.equalTo(self.contentView.mas_centerY);
@@ -39,6 +41,7 @@
         if (!_data) {
             _data = [UILabel labelWithFont:[UIFont systemFontOfSize:15.0] textColor:[UIColor blackColor]];
             [self.contentView addSubview:_data];
+            _data.adjustsFontSizeToFitWidth = YES;
             [_data mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(ScreenWidth / 4.0 - 40, viewHeight));
                 make.centerY.equalTo(self.contentView.mas_centerY);
@@ -70,6 +73,7 @@
         _status.lineBreakMode = NSLineBreakByWordWrapping;
         _data.textAlignment = NSTextAlignmentCenter;
         _data.lineBreakMode = NSLineBreakByWordWrapping;
+        _data.numberOfLines = 0;
         _time_ymd.textAlignment = NSTextAlignmentCenter;
         _time_ymd.numberOfLines = 0;
         _time_hms.textAlignment = NSTextAlignmentCenter;

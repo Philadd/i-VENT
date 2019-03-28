@@ -21,17 +21,18 @@
         }
         if (!_dataMonitorBtn) {
             _dataMonitorBtn = [[UIButton alloc] initWithFrame:CGRectMake(ScreenWidth / 3.0 * 2 + (ScreenWidth / 3.0 - 50)/2.0, (viewHeight - 30)/2.0, 50, 30)];
-            [_dataMonitorBtn addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
+            [_dataMonitorBtn addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventValueChanged];
             [self.contentView addSubview:_dataMonitorBtn];
         }
     }
     return self;
 }
 
-- (void)switchAction:(id)sender{
+- (void)addAction:(id)sender{
     //    UISwitch *switchButton = (UISwitch *)sender;
     //    if (self.block) {
     //        self.block(switchButton.isOn);
     //    }
+    NSLog(@"置FF");
 }
 @end
