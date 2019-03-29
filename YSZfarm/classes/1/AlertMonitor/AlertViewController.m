@@ -60,8 +60,8 @@ static int searchBarHeight = 40;
         tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshAlert)];
         tableView.mj_header.automaticallyChangeAlpha = YES;
         [tableView.mj_header beginRefreshing];
-         
-        
+        //去掉没有数据的tableview分割线
+        tableView.tableFooterView = [[UIView alloc] init];
         
         [self.view addSubview:tableView];
         
@@ -90,6 +90,8 @@ static int searchBarHeight = 40;
         //tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [tableView registerClass:[AlertCell class] forCellReuseIdentifier:CellIdentifier_alertHis];
         [tableView registerClass:[alertSectionView class] forHeaderFooterViewReuseIdentifier:SectionIdentifier_alertHis];
+        //去掉没有数据的tableview分割线
+        tableView.tableFooterView = [[UIView alloc] init];
         
         [self.historyView addSubview:tableView];
         

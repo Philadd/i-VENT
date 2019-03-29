@@ -303,7 +303,8 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
     
 }
 
-
+#pragma mark 获取网关下设备列表
+//刷新监控列表数据
 - (void)reloadMonitorData{
    // [self bindDatapointStatus];//刷新状态栏
     
@@ -330,7 +331,6 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         NSLog(@"success:%@",daetr);
         [[FarmDatabase shareInstance] setDeviceDic:responseDic];
-        NSLog(@"返回数据%@",responseDic);
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"Error:%@",error);

@@ -35,7 +35,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    self.view.frame = CGRectMake(0, 200, ScreenWidth, ScreenHeight);
+    self.view.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
 }
 
 - (NSArray *)titleData {

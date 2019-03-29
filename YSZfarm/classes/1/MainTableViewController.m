@@ -124,6 +124,7 @@ static int apiKeyArrayCount = 0;
     _searchData = [[NSMutableArray alloc] init];
 }
 
+#pragma mark - 获取用户网关的数据
 //懒加载
 - (NSMutableArray *)sectionData:(NSDictionary *)dic{
     if (_sectionData == nil) {
@@ -132,7 +133,7 @@ static int apiKeyArrayCount = 0;
             _apiKeyArray = [[NSMutableArray alloc] init];
         }
         _sectionData = [[NSMutableArray alloc]init];
-        
+        NSLog(@"获取用户信息数据%@",dic);
         if ([[dic objectForKey:@"data"] isKindOfClass:[NSArray class]] && [[dic objectForKey:@"data"] count] > 0) {
             [[dic objectForKey:@"data"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 SectionModel *model = [[SectionModel alloc] init];
@@ -320,7 +321,7 @@ static int apiKeyArrayCount = 0;
             NSLog(@"我的信息%@ %@",cell.deviceId,cell.apiKey);
             Url = [Url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
             [manager1 GET:Url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                NSLog(@"aadaddasdfgg%@",responseObject);
+                NSLog(@"onenet返回值%@",responseObject);
                 NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
                 [[FarmDatabase shareInstance] setDeviceDicOnenet:responseDic];
                 NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
@@ -379,7 +380,6 @@ static int apiKeyArrayCount = 0;
         NSDictionary *parameters = @{@"devIds":cell.deviceId};
         url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
         [manager1 GET:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            NSLog(@"%@adaddada",responseObject);
             NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
             [[FarmDatabase shareInstance] setDeviceDicOnenet:responseDic];
             NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];

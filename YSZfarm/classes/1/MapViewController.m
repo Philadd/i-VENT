@@ -58,7 +58,6 @@ static int apiKeyArrayCount = 0;
     void(^block)(NSDictionary *) = ^(NSDictionary *dic){
         [self sectionData:dic];
         
-        //NSLog(@"%@",dic);
     };
     [[FarmDatabase shareInstance] getDeviceData:block];
     
@@ -81,6 +80,7 @@ static int apiKeyArrayCount = 0;
     _sectionData = nil;
 }
 
+#pragma mark - 用户网关的数据
 //懒加载
 - (NSMutableArray *)sectionData:(NSDictionary *)dic{
     if (_sectionData == nil) {

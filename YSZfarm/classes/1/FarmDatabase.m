@@ -52,7 +52,7 @@ static FarmDatabase* _instance = nil;
 
 
 
-#pragma mark -后台获取数据
+#pragma mark -获取用户网关的数据
 - (void)setuserid:(NSString *)userid
 {
     self.userId = userid;
