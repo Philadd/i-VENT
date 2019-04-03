@@ -11,7 +11,7 @@
 @interface DeviceSectionModel : NSObject
 @property (nonatomic,assign) BOOL isExpand;
 @property (nonatomic,strong) NSString *deviceGroupName;
-@property (nonatomic,strong) NSString *datapointGroupUid;
+@property (nonatomic,strong) NSString *datapointGroupMac;
 @property (nonatomic,strong) NSNumber *datapointGroupId;
 @property (nonatomic,strong) NSArray *cellArray;
 @end

@@ -120,7 +120,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                 
                 DeviceSectionModel *model = [[DeviceSectionModel alloc] init];
                 model.deviceGroupName = J2String([obj objectForKey:@"name"]);
-                model.datapointGroupUid = J2String([obj objectForKey:@"mac"]);
+                model.datapointGroupMac = J2String([obj objectForKey:@"mac"]);
                 if (obj[@"mac"] && [obj[@"mac"] isKindOfClass:[NSNumber class]]) {
                     model.datapointGroupId = obj[@"mac"];
                 }else{
@@ -316,7 +316,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
     NSMutableDictionary *isExpandDic = [[NSMutableDictionary alloc] init];
     [_sectionData enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         DeviceSectionModel *model = (DeviceSectionModel *)obj;
-        [isExpandDic setValue:model forKey:model.datapointGroupUid];
+        [isExpandDic setValue:model forKey:model.datapointGroupMac];
     }];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -348,8 +348,8 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         [self sectionData:[[FarmDatabase shareInstance] deviceDic]];
         [_sectionData enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             DeviceSectionModel *model = (DeviceSectionModel *)obj;
-            if ([isExpandDic objectForKey:model.datapointGroupUid]) {
-                DeviceSectionModel *modelOld = (DeviceSectionModel *)[isExpandDic objectForKey:model.datapointGroupUid];
+            if ([isExpandDic objectForKey:model.datapointGroupMac]) {
+                DeviceSectionModel *modelOld = (DeviceSectionModel *)[isExpandDic objectForKey:model.datapointGroupMac];
                 model.isExpand = modelOld.isExpand;
             }
         }];
@@ -477,11 +477,37 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
             DatapointBit16_32Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBit16_32];
             cell.dataMonitorName.text = model.streamName;
             if (model.value) {
-                cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%@%@",model.value,model.unit];
+                cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%@",model.value];
+                cell.uintData.text = [NSString stringWithFormat:@"%@",model.unit];
             }else{
                 cell.dataMonitorDataTF.text = @"NULL";
             }
-            cell.dataMonitorDataTF.enabled = NO;
+            
+            __weak typeof(self) weakSelf = self;
+            cell.block_timerstart = ^{
+                [weakSelf.timer setFireDate:[NSDate date]];
+            };
+            cell.block_timerpause = ^{
+                [weakSelf.timer setFireDate:[NSDate distantFuture]];
+                
+            };
+            cell.block = ^(NSString *fieldText) {
+                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+                [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+                NSNumber *value = [NSNumber numberWithInt:[NSString String2long:fieldText]];
+                NSDictionary *parameters = @{@"sn":[FarmDatabase shareInstance].sn,@"mac":section.datapointGroupMac,@"streamId":model.streamId,@"value":value};
+              
+                [manager POST:@"http://rijin.thingcom.com:80/api/v1/device/order" parameters:parameters progress:nil
+                      success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                          NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+                          NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+                            NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+                            NSLog(@"success:%@",daetr);
+                            
+                        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                            NSLog(@"Error:%@",error);
+                        }];
+            };
             return cell;
         }else if ([model.dataType intValue] == 1){
             DatapointBitCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBIt];

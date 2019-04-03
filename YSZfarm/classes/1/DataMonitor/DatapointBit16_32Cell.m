@@ -33,17 +33,30 @@
             _dataMonitorDataTF.font = [UIFont systemFontOfSize:13.0];
             _dataMonitorDataTF.delegate = self;
             [_dataMonitorDataTF addDoneOnKeyboardWithTarget:self action:@selector(doneAction)];
+            [_dataMonitorDataTF addTarget:self action:@selector(TFchange:) forControlEvents:UIControlEventEditingChanged];
             [self.contentView addSubview:_dataMonitorDataTF];
         }
+        if (!_uintData) {
+            _uintData = [[UILabel alloc] init];
+            _uintData = [UILabel labelWithFont:[UIFont systemFontOfSize:13.0] textColor:[UIColor blackColor]];
+            [self.contentView addSubview:self.uintData];
+            
+            [_uintData mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.size.mas_equalTo(CGSizeMake(yAutoFit(viewHeight - 10),yAutoFit(viewHeight - 10)));
+                make.centerY.equalTo(self.contentView.mas_centerY);
+                make.right.equalTo(self.dataMonitorDataTF.mas_right).offset(5);
+            }];
+        }
+        
     }
     return self;
 }
 
 - (void)doneAction{
-    if ([NSString String2long:_dataMonitorDataTF.text] > 65535) {
+    if ([NSString String2long:_dataMonitorDataTF.text] > 4095) {
         if (self.block) {
-            self.block([NSString stringWithFormat:@"65535"]);
-            _dataMonitorDataTF.text = [NSString stringWithFormat:@"65535"];
+            self.block([NSString stringWithFormat:@"4095"]);
+            _dataMonitorDataTF.text = [NSString stringWithFormat:@"4095"];
             [NSObject showHudTipStr:LocalString(@"Input number more than limit")];
         }
     }else{
@@ -77,10 +90,16 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     //[_timer setFireDate:[NSDate date]];
     if (self.block_timerstart) {
-       self.block_timerstart();
+        self.block_timerstart();
     }
     
 }
 
+- (void)TFchange:(UITextField *)textField{
+    if (_dataMonitorDataTF.text.length >4) {
+        _dataMonitorDataTF.text = [_dataMonitorDataTF.text substringWithRange:NSMakeRange(0, 4)];
+    }
+
+}
 
 @end

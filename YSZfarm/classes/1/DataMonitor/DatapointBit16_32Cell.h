@@ -13,6 +13,7 @@ typedef void(^nstimerBlock)(void);
 @interface DatapointBit16_32Cell : UITableViewCell
 @property (strong,nonatomic) UILabel *dataMonitorName;
 @property (strong,nonatomic) UITextField *dataMonitorDataTF;
+@property (nonatomic,strong) UILabel *uintData;
 @property (nonatomic,strong) CallBackBlock_16 block;
 @property (nonatomic,strong) nstimerBlock block_timerpause;
 @property (nonatomic,strong) nstimerBlock block_timerstart;
