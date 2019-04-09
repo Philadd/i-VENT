@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3E4FE44D1F274260001DCBE2"
-               BuildableName = "YSZfarm.app"
-               BlueprintName = "YSZfarm"
-               ReferencedContainer = "container:YSZfarm.xcodeproj">
+               BuildableName = "iVENT.app"
+               BlueprintName = "iVENT"
+               ReferencedContainer = "container:iVENT.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3E4FE44D1F274260001DCBE2"
-            BuildableName = "YSZfarm.app"
-            BlueprintName = "YSZfarm"
-            ReferencedContainer = "container:YSZfarm.xcodeproj">
+            BuildableName = "iVENT.app"
+            BlueprintName = "iVENT"
+            ReferencedContainer = "container:iVENT.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -57,9 +57,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3E4FE44D1F274260001DCBE2"
-            BuildableName = "YSZfarm.app"
-            BlueprintName = "YSZfarm"
-            ReferencedContainer = "container:YSZfarm.xcodeproj">
+            BuildableName = "iVENT.app"
+            BlueprintName = "iVENT"
+            ReferencedContainer = "container:iVENT.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -76,9 +76,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3E4FE44D1F274260001DCBE2"
-            BuildableName = "YSZfarm.app"
-            BlueprintName = "YSZfarm"
-            ReferencedContainer = "container:YSZfarm.xcodeproj">
+            BuildableName = "iVENT.app"
+            BlueprintName = "iVENT"
+            ReferencedContainer = "container:iVENT.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

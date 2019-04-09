@@ -10,6 +10,9 @@
 		297BBD6F2D8A944C489AE8B9 /* libPods-YSZfarm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E8F41C656EEA5AB3B1A0ACF /* libPods-YSZfarm.a */; };
 		3604FD4D225B440900D0B97D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3604FD4A225B440900D0B97D /* LoginViewController.m */; };
 		3604FD4E225B440900D0B97D /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3604FD4B225B440900D0B97D /* RegisterViewController.m */; };
+		364A88DB225C392000ECE479 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 364A88D9225C391F00ECE479 /* AppDelegate.m */; };
+		364A88DE225C399A00ECE479 /* NSString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 364A88DC225C399A00ECE479 /* NSString+Common.m */; };
+		364A88E1225C39B500ECE479 /* UIColor+ColorChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 364A88DF225C39B400ECE479 /* UIColor+ColorChange.m */; };
 		36770F83223F484E0013A6E1 /* PasswordTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36770F7B223F484E0013A6E1 /* PasswordTFCell.m */; };
 		36770F84223F484E0013A6E1 /* PhoneTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36770F7E223F484E0013A6E1 /* PhoneTFCell.m */; };
 		36770F85223F484E0013A6E1 /* PhoneVerityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36770F81223F484E0013A6E1 /* PhoneVerityCell.m */; };
@@ -77,7 +80,6 @@
 		BB0F9158200CA9BB0060D287 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB0F9157200CA9BB0060D287 /* libbz2.tbd */; };
 		BB0F915A200CA9D20060D287 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB0F9159200CA9D20060D287 /* libiconv.tbd */; };
 		BB0F9160200CAB9B0060D287 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BB0F915F200CAB9B0060D287 /* libz.tbd */; };
-		BB0F9165200CAC840060D287 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0F9164200CAC840060D287 /* AppDelegate.m */; };
 		BB1C49D9205A605100F326B6 /* play_close_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB1C49D5205A605000F326B6 /* play_close_sel@2x.png */; };
 		BB1C49DA205A605100F326B6 /* play_close.png in Resources */ = {isa = PBXBuildFile; fileRef = BB1C49D6205A605000F326B6 /* play_close.png */; };
 		BB1C49DB205A605100F326B6 /* play_close_sel.png in Resources */ = {isa = PBXBuildFile; fileRef = BB1C49D7205A605100F326B6 /* play_close_sel.png */; };
@@ -157,7 +159,6 @@
 		BB4AF137205F58FB0031F3B2 /* login_password@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4AF133205F58FB0031F3B2 /* login_password@1x.png */; };
 		BB4AF138205F58FB0031F3B2 /* login_password@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4AF134205F58FB0031F3B2 /* login_password@2x.png */; };
 		BB5C0AFE20522507002C1415 /* BindDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0AFD20522507002C1415 /* BindDeviceTableViewCell.m */; };
-		BB5C49CE207DB03B007B2508 /* smallImageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5C49CD207DB03B007B2508 /* smallImageButton.m */; };
 		BB5C78672062462700C40795 /* controledMonitorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5C78662062462700C40795 /* controledMonitorModel.m */; };
 		BB5C786B2062641200C40795 /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB5C786A2062641200C40795 /* background@2x.png */; };
 		BB5DCD9A205CFE2E00095D71 /* UnusualTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5DCD99205CFE2E00095D71 /* UnusualTableViewCell.m */; };
@@ -205,8 +206,6 @@
 		BBA523F520464F56009A3A89 /* DeviceInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBA523F320464F56009A3A89 /* DeviceInfoCell.xib */; };
 		BBA523F920464FD6009A3A89 /* DeviceInfoExtendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA523F720464FD6009A3A89 /* DeviceInfoExtendCell.m */; };
 		BBA523FA20464FD6009A3A89 /* DeviceInfoExtendCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBA523F820464FD6009A3A89 /* DeviceInfoExtendCell.xib */; };
-		BBA523FD20466061009A3A89 /* UIColor+ColorChange.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA523FC20466061009A3A89 /* UIColor+ColorChange.m */; };
-		BBB6111720198CB6007FA3D4 /* NSString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB6111620198CB6007FA3D4 /* NSString+Common.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -215,6 +214,12 @@
 		3604FD4A225B440900D0B97D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		3604FD4B225B440900D0B97D /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		3604FD4C225B440900D0B97D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		364A88D9225C391F00ECE479 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		364A88DA225C391F00ECE479 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		364A88DC225C399A00ECE479 /* NSString+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Common.m"; path = "iVENT/classes/NSString+Common.m"; sourceTree = SOURCE_ROOT; };
+		364A88DD225C399A00ECE479 /* NSString+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Common.h"; path = "iVENT/classes/NSString+Common.h"; sourceTree = SOURCE_ROOT; };
+		364A88DF225C39B400ECE479 /* UIColor+ColorChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+ColorChange.m"; path = "iVENT/classes/UIColor+ColorChange.m"; sourceTree = SOURCE_ROOT; };
+		364A88E0225C39B500ECE479 /* UIColor+ColorChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+ColorChange.h"; path = "iVENT/classes/UIColor+ColorChange.h"; sourceTree = SOURCE_ROOT; };
 		36770F7B223F484E0013A6E1 /* PasswordTFCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordTFCell.m; sourceTree = "<group>"; };
 		36770F7C223F484E0013A6E1 /* PhoneTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneTFCell.h; sourceTree = "<group>"; };
 		36770F7D223F484E0013A6E1 /* PasswordTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasswordTFCell.h; sourceTree = "<group>"; };
@@ -223,7 +228,6 @@
 		36770F80223F484E0013A6E1 /* PhoneVerityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneVerityCell.h; sourceTree = "<group>"; };
 		36770F81223F484E0013A6E1 /* PhoneVerityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneVerityCell.m; sourceTree = "<group>"; };
 		36770F82223F484E0013A6E1 /* NameTFCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameTFCell.m; sourceTree = "<group>"; };
-		36FEB52C21EF0BC7007618A5 /* EZOpenSDKFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EZOpenSDKFramework.framework; path = YSZfarm/EZOpenSDK/EZOpenSDKFramework.framework; sourceTree = "<group>"; };
 		36FF0EE1223A5B2A0042E066 /* DatapointButtonFFCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatapointButtonFFCell.h; sourceTree = "<group>"; };
 		36FF0EE2223A5B2A0042E066 /* DatapointButtonFFCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DatapointButtonFFCell.m; sourceTree = "<group>"; };
 		3E23399D1F8DF94900358219 /* LCMD5Tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCMD5Tool.h; sourceTree = "<group>"; };
@@ -269,7 +273,7 @@
 		3E4887D01F386A1F007C7AAD /* SettingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingItem.m; sourceTree = "<group>"; };
 		3E4887D21F386A34007C7AAD /* GroupItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupItem.h; sourceTree = "<group>"; };
 		3E4887D31F386A34007C7AAD /* GroupItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupItem.m; sourceTree = "<group>"; };
-		3E4FE44E1F274260001DCBE2 /* YSZfarm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YSZfarm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E4FE44E1F274260001DCBE2 /* iVENT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iVENT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E4FE4521F274260001DCBE2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3E4FE4571F274260001DCBE2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		3E4FE4581F274260001DCBE2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -302,7 +306,7 @@
 		3EC2AE321F2AE5A900705C6C /* TableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TableCell.h; path = ../../../TableCell.h; sourceTree = "<group>"; };
 		3EC2AE331F2AE5A900705C6C /* TableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TableCell.m; path = ../../../TableCell.m; sourceTree = "<group>"; };
 		3EC2AE341F2AE5A900705C6C /* TableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TableCell.xib; path = ../../../TableCell.xib; sourceTree = "<group>"; };
-		3EC89A1E1FDFCF5D008909C5 /* YSZfarm-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YSZfarm-Prefix.pch"; sourceTree = "<group>"; };
+		3EC89A1E1FDFCF5D008909C5 /* iVENT-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iVENT-Prefix.pch"; sourceTree = "<group>"; };
 		3ED73F361FE21752007A2AD4 /* NSObject+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Common.h"; sourceTree = "<group>"; };
 		3ED73F371FE21752007A2AD4 /* NSObject+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Common.m"; sourceTree = "<group>"; };
 		3ED73F381FE21752007A2AD4 /* UIButton+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Common.h"; sourceTree = "<group>"; };
@@ -341,8 +345,6 @@
 		BB0F9157200CA9BB0060D287 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		BB0F9159200CA9D20060D287 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		BB0F915F200CAB9B0060D287 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		BB0F9163200CAC840060D287 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = YSZfarm/AppDelegate.h; sourceTree = SOURCE_ROOT; };
-		BB0F9164200CAC840060D287 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = YSZfarm/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		BB1C49D5205A605000F326B6 /* play_close_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play_close_sel@2x.png"; sourceTree = "<group>"; };
 		BB1C49D6205A605000F326B6 /* play_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_close.png; sourceTree = "<group>"; };
 		BB1C49D7205A605100F326B6 /* play_close_sel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_close_sel.png; sourceTree = "<group>"; };
@@ -358,8 +360,6 @@
 		BB24664120495BDB00EA39AE /* NickNameTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NickNameTableViewCell.h; sourceTree = "<group>"; };
 		BB24664220495BDB00EA39AE /* NickNameTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NickNameTableViewCell.m; sourceTree = "<group>"; };
 		BB24664320495BDB00EA39AE /* NickNameTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NickNameTableViewCell.xib; sourceTree = "<group>"; };
-		BB2F8BF720BE902100028BBD /* libJKVValue.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libJKVValue.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		BB2F8BF920BE902A00028BBD /* libCocoaAsyncSocket.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libCocoaAsyncSocket.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2F8BFA20BEA9DA00028BBD /* 播放@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "播放@2x.png"; sourceTree = "<group>"; };
 		BB34CCE320513E6900E529A4 /* BindDevicesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BindDevicesViewController.h; sourceTree = "<group>"; };
 		BB34CCE420513E6900E529A4 /* BindDevicesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BindDevicesViewController.m; sourceTree = "<group>"; };
@@ -433,8 +433,6 @@
 		BB4AF134205F58FB0031F3B2 /* login_password@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_password@2x.png"; sourceTree = "<group>"; };
 		BB5C0AFC20522507002C1415 /* BindDeviceTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BindDeviceTableViewCell.h; sourceTree = "<group>"; };
 		BB5C0AFD20522507002C1415 /* BindDeviceTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BindDeviceTableViewCell.m; sourceTree = "<group>"; };
-		BB5C49CC207DB03B007B2508 /* smallImageButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = smallImageButton.h; path = YSZfarm/classes/2/smallImageButton.h; sourceTree = SOURCE_ROOT; };
-		BB5C49CD207DB03B007B2508 /* smallImageButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = smallImageButton.m; path = YSZfarm/classes/2/smallImageButton.m; sourceTree = SOURCE_ROOT; };
 		BB5C78652062462700C40795 /* controledMonitorModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = controledMonitorModel.h; sourceTree = "<group>"; };
 		BB5C78662062462700C40795 /* controledMonitorModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = controledMonitorModel.m; sourceTree = "<group>"; };
 		BB5C786A2062641200C40795 /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
@@ -492,10 +490,6 @@
 		BBA523F620464FD6009A3A89 /* DeviceInfoExtendCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceInfoExtendCell.h; sourceTree = "<group>"; };
 		BBA523F720464FD6009A3A89 /* DeviceInfoExtendCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeviceInfoExtendCell.m; sourceTree = "<group>"; };
 		BBA523F820464FD6009A3A89 /* DeviceInfoExtendCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceInfoExtendCell.xib; sourceTree = "<group>"; };
-		BBA523FB20466061009A3A89 /* UIColor+ColorChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+ColorChange.h"; path = "YSZfarm/classes/UIColor+ColorChange.h"; sourceTree = SOURCE_ROOT; };
-		BBA523FC20466061009A3A89 /* UIColor+ColorChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+ColorChange.m"; path = "YSZfarm/classes/UIColor+ColorChange.m"; sourceTree = SOURCE_ROOT; };
-		BBB6111520198CB6007FA3D4 /* NSString+Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSString+Common.h"; path = "YSZfarm/classes/NSString+Common.h"; sourceTree = SOURCE_ROOT; };
-		BBB6111620198CB6007FA3D4 /* NSString+Common.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSString+Common.m"; path = "YSZfarm/classes/NSString+Common.m"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -623,7 +617,7 @@
 		3E4FE4451F274260001DCBE2 = {
 			isa = PBXGroup;
 			children = (
-				3E4FE4501F274260001DCBE2 /* YSZfarm */,
+				3E4FE4501F274260001DCBE2 /* iVENT */,
 				3E4FE44F1F274260001DCBE2 /* Products */,
 				3EF3149D1F2C3A4300272903 /* Frameworks */,
 				C021068B8667704D11FD39B3 /* Pods */,
@@ -633,12 +627,12 @@
 		3E4FE44F1F274260001DCBE2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3E4FE44E1F274260001DCBE2 /* YSZfarm.app */,
+				3E4FE44E1F274260001DCBE2 /* iVENT.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3E4FE4501F274260001DCBE2 /* YSZfarm */ = {
+		3E4FE4501F274260001DCBE2 /* iVENT */ = {
 			isa = PBXGroup;
 			children = (
 				BB9268402069E8E60052BCC7 /* mapapi.bundle */,
@@ -649,22 +643,22 @@
 				3E4FE4681F274341001DCBE2 /* classes */,
 				3E4FE4571F274260001DCBE2 /* ViewController.h */,
 				3E4FE4581F274260001DCBE2 /* ViewController.m */,
-				BB0F9163200CAC840060D287 /* AppDelegate.h */,
-				BB0F9164200CAC840060D287 /* AppDelegate.m */,
+				364A88DA225C391F00ECE479 /* AppDelegate.h */,
+				364A88D9225C391F00ECE479 /* AppDelegate.m */,
 				3E4FE45A1F274260001DCBE2 /* Main.storyboard */,
 				3E4FE45D1F274260001DCBE2 /* Assets.xcassets */,
 				3E4FE45F1F274260001DCBE2 /* LaunchScreen.storyboard */,
 				3E4FE4621F274260001DCBE2 /* Info.plist */,
 				3E4FE4511F274260001DCBE2 /* Supporting Files */,
 			);
-			path = YSZfarm;
+			path = iVENT;
 			sourceTree = "<group>";
 		};
 		3E4FE4511F274260001DCBE2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
 				3E4FE4521F274260001DCBE2 /* main.m */,
-				3EC89A1E1FDFCF5D008909C5 /* YSZfarm-Prefix.pch */,
+				3EC89A1E1FDFCF5D008909C5 /* iVENT-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -703,8 +697,8 @@
 				3ED73F451FE2191C007A2AD4 /* textField */,
 				3ED73F361FE21752007A2AD4 /* NSObject+Common.h */,
 				3ED73F371FE21752007A2AD4 /* NSObject+Common.m */,
-				BBB6111520198CB6007FA3D4 /* NSString+Common.h */,
-				BBB6111620198CB6007FA3D4 /* NSString+Common.m */,
+				364A88DD225C399A00ECE479 /* NSString+Common.h */,
+				364A88DC225C399A00ECE479 /* NSString+Common.m */,
 				3ED73F381FE21752007A2AD4 /* UIButton+Common.h */,
 				3ED73F391FE21752007A2AD4 /* UIButton+Common.m */,
 				3ED73F3A1FE21752007A2AD4 /* UILabel+Common.h */,
@@ -713,8 +707,8 @@
 				3ED73F3D1FE21752007A2AD4 /* UITextField+Common.m */,
 				3ED73F4E1FE22D75007A2AD4 /* UISearchBar+Common.h */,
 				3ED73F4F1FE22D75007A2AD4 /* UISearchBar+Common.m */,
-				BBA523FB20466061009A3A89 /* UIColor+ColorChange.h */,
-				BBA523FC20466061009A3A89 /* UIColor+ColorChange.m */,
+				364A88E0225C39B500ECE479 /* UIColor+ColorChange.h */,
+				364A88DF225C39B400ECE479 /* UIColor+ColorChange.m */,
 			);
 			name = OC_Category;
 			path = classes/4;
@@ -829,8 +823,6 @@
 			children = (
 				3ED73F471FE2294D007A2AD4 /* userButton.h */,
 				3ED73F481FE2294D007A2AD4 /* userButton.m */,
-				BB5C49CC207DB03B007B2508 /* smallImageButton.h */,
-				BB5C49CD207DB03B007B2508 /* smallImageButton.m */,
 			);
 			name = Button;
 			sourceTree = "<group>";
@@ -863,9 +855,6 @@
 		3EF3149D1F2C3A4300272903 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				36FEB52C21EF0BC7007618A5 /* EZOpenSDKFramework.framework */,
-				BB2F8BF920BE902A00028BBD /* libCocoaAsyncSocket.a */,
-				BB2F8BF720BE902100028BBD /* libJKVValue.a */,
 				BB9268212069E82B0052BCC7 /* libcrypto.a */,
 				BB9268222069E82C0052BCC7 /* libssl.a */,
 				BB92681F2069E80B0052BCC7 /* CoreLocation.framework */,
@@ -1083,9 +1072,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3E4FE44D1F274260001DCBE2 /* YSZfarm */ = {
+		3E4FE44D1F274260001DCBE2 /* iVENT */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3E4FE4651F274260001DCBE2 /* Build configuration list for PBXNativeTarget "YSZfarm" */;
+			buildConfigurationList = 3E4FE4651F274260001DCBE2 /* Build configuration list for PBXNativeTarget "iVENT" */;
 			buildPhases = (
 				FCE968532CA93F426F4EB1BE /* [CP] Check Pods Manifest.lock */,
 				3E4FE44A1F274260001DCBE2 /* Sources */,
@@ -1098,9 +1087,9 @@
 			);
 			dependencies = (
 			);
-			name = YSZfarm;
+			name = iVENT;
 			productName = YSZfarm;
-			productReference = 3E4FE44E1F274260001DCBE2 /* YSZfarm.app */;
+			productReference = 3E4FE44E1F274260001DCBE2 /* iVENT.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1119,7 +1108,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3E4FE4491F274260001DCBE2 /* Build configuration list for PBXProject "YSZfarm" */;
+			buildConfigurationList = 3E4FE4491F274260001DCBE2 /* Build configuration list for PBXProject "iVENT" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1132,7 +1121,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3E4FE44D1F274260001DCBE2 /* YSZfarm */,
+				3E4FE44D1F274260001DCBE2 /* iVENT */,
 			);
 		};
 /* End PBXProject section */
@@ -1320,27 +1309,26 @@
 				3E4221E61F2EC27100DBE557 /* UIImageView+AFNetworking.m in Sources */,
 				3ED73F401FE21752007A2AD4 /* UILabel+Common.m in Sources */,
 				3E5D7FD61FEB50E3007C7B81 /* TouchTableView.m in Sources */,
-				BBA523FD20466061009A3A89 /* UIColor+ColorChange.m in Sources */,
 				3E4221E51F2EC27100DBE557 /* UIButton+AFNetworking.m in Sources */,
 				3E3D95DB1FE9132F00D45494 /* SectionModel.m in Sources */,
 				3E9E02011FF0CF31006DA0FE /* DataMonitorView.m in Sources */,
 				3EFFB5BE1F28271400E7205E /* FarmDatabase.m in Sources */,
 				3E9E020A1FF0D1DF006DA0FE /* DeviceCellModel.m in Sources */,
-				BBB6111720198CB6007FA3D4 /* NSString+Common.m in Sources */,
 				36770F85223F484E0013A6E1 /* PhoneVerityCell.m in Sources */,
 				BBA523F420464F56009A3A89 /* DeviceInfoCell.m in Sources */,
+				364A88DE225C399A00ECE479 /* NSString+Common.m in Sources */,
 				3E5D7FDA1FEBAE2B007C7B81 /* DetailTabViewController.m in Sources */,
 				BB5E6A64204D2291003DABDB /* UIView+Extension.m in Sources */,
 				BB37DA49204425500078504A /* AlertCell.m in Sources */,
 				BB5E6A69204D22A8003DABDB /* WSDatePickerView.m in Sources */,
 				BBA523F920464FD6009A3A89 /* DeviceInfoExtendCell.m in Sources */,
 				BB5C0AFE20522507002C1415 /* BindDeviceTableViewCell.m in Sources */,
+				364A88E1225C39B500ECE479 /* UIColor+ColorChange.m in Sources */,
 				3E4221E01F2EC27100DBE557 /* AFURLSessionManager.m in Sources */,
 				36770F86223F484E0013A6E1 /* NameTFCell.m in Sources */,
 				36FF0EE3223A5B2A0042E066 /* DatapointButtonFFCell.m in Sources */,
 				3E4221E41F2EC27100DBE557 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				3E4221DC1F2EC27100DBE557 /* AFNetworkReachabilityManager.m in Sources */,
-				BB0F9165200CAC840060D287 /* AppDelegate.m in Sources */,
 				3E4FE4591F274260001DCBE2 /* ViewController.m in Sources */,
 				3E9E02071FF0D1C1006DA0FE /* DeviceSectionModel.m in Sources */,
 				3ED73F3F1FE21752007A2AD4 /* UIButton+Common.m in Sources */,
@@ -1364,12 +1352,12 @@
 				3E4FE47D1F2746F1001DCBE2 /* MainTableViewController.m in Sources */,
 				3E4FE47A1F2746BC001DCBE2 /* MainViewController.m in Sources */,
 				BB2466362049006A00EA39AE /* LeftDrawerViewController.m in Sources */,
-				BB5C49CE207DB03B007B2508 /* smallImageButton.m in Sources */,
 				BB7FF94220A44119005A04C9 /* PasswordViewController.m in Sources */,
 				3E4221E81F2EC27100DBE557 /* UIRefreshControl+AFNetworking.m in Sources */,
 				3E4221E71F2EC27100DBE557 /* UIProgressView+AFNetworking.m in Sources */,
 				BB5E6A65204D2291003DABDB /* NSDate+Extension.m in Sources */,
 				3E9E020E1FF0D7EB006DA0FE /* DevieceDataCell.m in Sources */,
+				364A88DB225C392000ECE479 /* AppDelegate.m in Sources */,
 				3E4887D41F386A34007C7AAD /* GroupItem.m in Sources */,
 				3ED73F3E1FE21752007A2AD4 /* NSObject+Common.m in Sources */,
 				BB246639204945B700EA39AE /* MMSideDrawerSectionHeaderView.m in Sources */,
@@ -1512,7 +1500,8 @@
 					"$(PROJECT_DIR)/YSZfarm",
 					"$(PROJECT_DIR)/Pods/BaiduMapKit/BaiduMapKit",
 				);
-				INFOPLIST_FILE = YSZfarm/Info.plist;
+				GCC_PREFIX_HEADER = "iVENT/iVENT-Prefix.pch";
+				INFOPLIST_FILE = iVENT/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -1537,7 +1526,8 @@
 					"$(PROJECT_DIR)/YSZfarm",
 					"$(PROJECT_DIR)/Pods/BaiduMapKit/BaiduMapKit",
 				);
-				INFOPLIST_FILE = YSZfarm/Info.plist;
+				GCC_PREFIX_HEADER = "iVENT/iVENT-Prefix.pch";
+				INFOPLIST_FILE = iVENT/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -1557,7 +1547,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3E4FE4491F274260001DCBE2 /* Build configuration list for PBXProject "YSZfarm" */ = {
+		3E4FE4491F274260001DCBE2 /* Build configuration list for PBXProject "iVENT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3E4FE4631F274260001DCBE2 /* Debug */,
@@ -1566,7 +1556,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3E4FE4651F274260001DCBE2 /* Build configuration list for PBXNativeTarget "YSZfarm" */ = {
+		3E4FE4651F274260001DCBE2 /* Build configuration list for PBXNativeTarget "iVENT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3E4FE4661F274260001DCBE2 /* Debug */,

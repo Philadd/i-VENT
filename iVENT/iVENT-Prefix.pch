@@ -26,8 +26,7 @@
 //#define EzvizAppKey @"fbd60f9eb1a945d6874a10763a610e4d"
 #define EzvizAppKey @"725dfa73f06a4f46a3d7166e693a5207"
 
-#define baiduSdkKey @"lIUV5Pbmg1cIm5mBTj5oVmGYofL5v5RS"
-
+#define baiduSdkKey @"3L0tlHbqpGQZL7AwKiyW4mEduP8KISAG"
 
 #define ScreenWidth                         [[UIScreen mainScreen] bounds].size.width
 #define ScreenHeight                        [[UIScreen mainScreen] bounds].size.height
