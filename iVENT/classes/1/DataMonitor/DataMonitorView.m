@@ -423,33 +423,44 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         cell.dataMonitorName.text = model.streamName;
         return cell;
     }
-    // 区分监控点类型。0：写 1：开关 2：置FF 3：读
+    /*
+     区分监控点类型。0：写 1：开关 2：置FF 3：读
+     */
     if ([model.dataType intValue] == 0) {
         DatapointBit16_32Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBit16_32];
         cell.dataMonitorName.text = model.streamName;
         if (model.value) {
             switch ([section.datapointType intValue]) {
-                case 7:
+                case 3:   //IO模块
+                    cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%16u",[model.value intValue]];
+                    cell.uintData.text = [NSString stringWithFormat:@"%@",@""];
+                    break;
+                case 6:   //振动传感器
+                    cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%.6f",[model.value floatValue]];
+                    cell.uintData.text = [NSString stringWithFormat:@"%@",model.unit];
+                    break;
+                case 7:   //风阀传感器
                     cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:0 X2:4095 Y1:0 Y2:90 unit:@""];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",@"°"];
                     break;
                     
-                case 11:
+                case 11:  //温度传感器
                     cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:-50 Y2:150 unit:@""];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",@"度"];
                     break;
                     
-                case 12:
+                case 12:  //风压传感器
                     cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:0 Y2:5000 unit:@""];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",@"pa"];
                     break;
                     
-                case 13:
+                case 13:  //噪声传感器
                     cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:30 Y2:120 unit:@""];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",@"dB"];
                     break;
                     
                 default:
+                    cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%@%@",model.value,model.unit];
                     break;
             }
         }else{
@@ -516,19 +527,25 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         if (model.value) {
 
             switch ([section.datapointType intValue]) {
-                case 7:
+                case 3:   //IO模块
+                    cell.monitorData.text = [NSString stringWithFormat:@"%16u",[model.value intValue]];
+                    break;
+                case 6:   //振动传感器
+                    cell.monitorData.text = [NSString stringWithFormat:@"%.6f%@",[model.value floatValue],model.unit];
+                    break;
+                case 7:   //风阀传感器
                     cell.monitorData.text = [NSString valueFromFloat:model.value X1:0 X2:4095 Y1:0 Y2:90 unit:@"°"];
                     break;
                     
-                case 11:
+                case 11:  //温度传感器
                     cell.monitorData.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:-50 Y2:150 unit:@"度"];
                     break;
                     
-                case 12:
+                case 12:  //风压传感器
                     cell.monitorData.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:0 Y2:5000 unit:@"pa"];
                     break;
                     
-                case 13:
+                case 13:  //噪声传感器
                     cell.monitorData.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:30 Y2:120 unit:@"dB"];
                     break;
                     
