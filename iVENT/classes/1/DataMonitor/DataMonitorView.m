@@ -28,7 +28,6 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 
 @interface DataMonitorView ()
 @property (nonatomic, strong) UITableView *myTableView;
-//@property (nonatomic, strong) UILabel *statusLabel;
 
 @property (nonatomic, strong) NSMutableArray *sectionData;
 @property (nonatomic, strong) NSDictionary *plcModelJson;
@@ -71,14 +70,6 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 }
 
 - (void)viewLayout{
-//    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(1, 0, ScreenWidth-2, 44)];
-//    _statusLabel.text = LocalString(@"没有绑定的监控点状态");
-//    _statusLabel.textAlignment = NSTextAlignmentCenter;
-//    _statusLabel.layer.borderColor = [UIColor blackColor].CGColor;
-//    _statusLabel.layer.borderWidth = 1.5f;
-//    _statusLabel.layer.cornerRadius = 10.f;
-//    [self.view addSubview:_statusLabel];
-    
     _myTableView = ({
         TouchTableView *tableView = [[TouchTableView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight - 44 - 44 - 20 - 44)];
         tableView.backgroundColor = [UIColor clearColor];
@@ -121,6 +112,8 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                 DeviceSectionModel *model = [[DeviceSectionModel alloc] init];
                 model.deviceGroupName = J2String([obj objectForKey:@"name"]);
                 model.datapointGroupMac = J2String([obj objectForKey:@"mac"]);
+                model.datapointType = J2String([obj objectForKey:@"type"]);
+                
                 if (obj[@"mac"] && [obj[@"mac"] isKindOfClass:[NSNumber class]]) {
                     model.datapointGroupId = obj[@"mac"];
                 }else{
@@ -430,125 +423,126 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         cell.dataMonitorName.text = model.streamName;
         return cell;
     }
-    NSLog(@"读写操作%@",model.writeRead);
-    
-    if ([model.writeRead intValue] == 0) {
-        if ([model.dataType intValue] == 1){
-            DatapointBitCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBIt];
-            cell.dataMonitorName.text = model.streamName;
-            
-            if ([[FarmDatabase shareInstance].auth isEqualToNumber:[NSNumber numberWithInt:4]]) {
-                //判断用户对这个网关的权限
-                cell.dataMonitorSwitch.enabled = NO;
+    // 区分监控点类型。0：写 1：开关 2：置FF 3：读
+    if ([model.dataType intValue] == 0) {
+        DatapointBit16_32Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBit16_32];
+        cell.dataMonitorName.text = model.streamName;
+        if (model.value) {
+            switch ([section.datapointType intValue]) {
+                case 7:
+                    cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:0 X2:4095 Y1:0 Y2:90 unit:@""];
+                    cell.uintData.text = [NSString stringWithFormat:@"%@",@"°"];
+                    break;
+                    
+                case 11:
+                    cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:-50 Y2:150 unit:@""];
+                    cell.uintData.text = [NSString stringWithFormat:@"%@",@"度"];
+                    break;
+                    
+                case 12:
+                    cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:0 Y2:5000 unit:@""];
+                    cell.uintData.text = [NSString stringWithFormat:@"%@",@"pa"];
+                    break;
+                    
+                case 13:
+                    cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:30 Y2:120 unit:@""];
+                    cell.uintData.text = [NSString stringWithFormat:@"%@",@"dB"];
+                    break;
+                    
+                default:
+                    break;
             }
-            
-            if ([model.bindDeviceType isEqualToString:@"local"]){
-                if ([model.value intValue]) {
-                    cell.dataMonitorSwitch.on = YES;
-                }else{
-                    cell.dataMonitorSwitch.on = NO;
-                }
-            }else{
-                if ([model.value intValue] % 2) {
-                    cell.dataMonitorSwitch.on = YES;
-                }else{
-                    cell.dataMonitorSwitch.on = NO;
-                }
-            }
-            cell.dataMonitorSwitch.enabled = NO;
-            return cell;
         }else{
-            DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
-            cell.deviceName.text = model.streamName;
-            if (model.value) {
-                if (model.unit) {
-                    cell.monitorData.text = [NSString stringWithFormat:@"%@%@",model.value,model.unit];
-                }else{
-                    cell.monitorData.text = [NSString stringWithFormat:@"%@",model.value];
-                }
-                
-            }else{
-                cell.monitorData.text = @"NULL";
-            }
-            return cell;
-        }
-    }else{
-        if ([model.dataType intValue] == 0) {
-            DatapointBit16_32Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBit16_32];
-            cell.dataMonitorName.text = model.streamName;
-            if (model.value) {
-                cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%@",model.value];
-                cell.uintData.text = [NSString stringWithFormat:@"%@",model.unit];
-            }else{
-                cell.dataMonitorDataTF.text = @"NULL";
-            }
-            
-            __weak typeof(self) weakSelf = self;
-            cell.block_timerstart = ^{
-                [weakSelf.timer setFireDate:[NSDate date]];
-            };
-            cell.block_timerpause = ^{
-                [weakSelf.timer setFireDate:[NSDate distantFuture]];
-                
-            };
-            cell.block = ^(NSString *fieldText) {
-                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-                [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-                NSNumber *value = [NSNumber numberWithInt:[NSString String2long:fieldText]];
-                NSDictionary *parameters = @{@"sn":[FarmDatabase shareInstance].sn,@"mac":section.datapointGroupMac,@"streamId":model.streamId,@"value":value};
-              
-                [manager POST:@"http://rijin.thingcom.com:80/api/v1/device/order" parameters:parameters progress:nil
-                      success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                          NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-                          NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
-                            NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-                            NSLog(@"success:%@",daetr);
-                            
-                        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                            NSLog(@"Error:%@",error);
-                        }];
-            };
-            return cell;
-        }else if ([model.dataType intValue] == 1){
-            DatapointBitCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBIt];
-            cell.dataMonitorName.text = model.streamName;
-            if ([[FarmDatabase shareInstance].auth isEqualToNumber:[NSNumber numberWithInt:4]]) {
-                //判断用户对这个网关的权限
-                cell.dataMonitorSwitch.enabled = NO;
-            }
-            
-            if ([model.bindDeviceType isEqualToString:@"local"]){
-                if ([model.value intValue]) {
-                    cell.dataMonitorSwitch.on = YES;
-                }else{
-                    cell.dataMonitorSwitch.on = NO;
-                }
-            }else{
-                if ([model.value intValue] % 2) {
-                    cell.dataMonitorSwitch.on = YES;
-                }else{
-                    cell.dataMonitorSwitch.on = NO;
-                }
-            }
-            cell.dataMonitorSwitch.enabled = NO;
-            return cell;
-        }else if ([model.dataType intValue] == 2){
-            DatapointButtonFFCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointButtonFF];
-            cell.dataMonitorName.text = model.streamName;
-            return cell;
-            
-        }else{
-            DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
-            cell.deviceName.text = model.streamName;
-            if (model.value) {
-                cell.monitorData.text = [NSString stringWithFormat:@"%@%@",model.value,model.unit];
-            }else{
-                cell.monitorData.text = @"NULL";
-            }
-            return cell;
+            cell.dataMonitorDataTF.text = @"NULL";
         }
         
+        __weak typeof(self) weakSelf = self;
+        cell.block_timerstart = ^{
+            [weakSelf.timer setFireDate:[NSDate date]];
+        };
+        cell.block_timerpause = ^{
+            [weakSelf.timer setFireDate:[NSDate distantFuture]];
+            
+        };
+        cell.block = ^(NSString *fieldText) {
+            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+            [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            NSNumber *value = [NSNumber numberWithInt:[NSString String2long:fieldText]];
+            NSDictionary *parameters = @{@"sn":[FarmDatabase shareInstance].sn,@"mac":section.datapointGroupMac,@"streamId":model.streamId,@"value":value};
+            
+            [manager POST:@"http://rijin.thingcom.com:80/api/v1/device/order" parameters:parameters progress:nil
+                    success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                        NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+                        NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+                        NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+                        NSLog(@"success:%@",daetr);
+                        
+                    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                        NSLog(@"Error:%@",error);
+                    }];
+        };
+        return cell;
+    }else if ([model.dataType intValue] == 1){
+        DatapointBitCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointBIt];
+        cell.dataMonitorName.text = model.streamName;
+        if ([[FarmDatabase shareInstance].auth isEqualToNumber:[NSNumber numberWithInt:4]]) {
+            //判断用户对这个网关的权限
+            cell.dataMonitorSwitch.enabled = NO;
+        }
+        
+        if ([model.bindDeviceType isEqualToString:@"local"]){
+            if ([model.value intValue]) {
+                cell.dataMonitorSwitch.on = YES;
+            }else{
+                cell.dataMonitorSwitch.on = NO;
+            }
+        }else{
+            if ([model.value intValue] % 2) {
+                cell.dataMonitorSwitch.on = YES;
+            }else{
+                cell.dataMonitorSwitch.on = NO;
+            }
+        }
+        cell.dataMonitorSwitch.enabled = NO;
+        return cell;
+    }else if ([model.dataType intValue] == 2){
+        DatapointButtonFFCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointButtonFF];
+        cell.dataMonitorName.text = model.streamName;
+        return cell;
+        
+    }else{
+        DevieceDataCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_Datapoint];
+        cell.deviceName.text = model.streamName;
+        if (model.value) {
+
+            switch ([section.datapointType intValue]) {
+                case 7:
+                    cell.monitorData.text = [NSString valueFromFloat:model.value X1:0 X2:4095 Y1:0 Y2:90 unit:@"°"];
+                    break;
+                    
+                case 11:
+                    cell.monitorData.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:-50 Y2:150 unit:@"度"];
+                    break;
+                    
+                case 12:
+                    cell.monitorData.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:0 Y2:5000 unit:@"pa"];
+                    break;
+                    
+                case 13:
+                    cell.monitorData.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:30 Y2:120 unit:@"dB"];
+                    break;
+                    
+                default:
+                    cell.monitorData.text = [NSString stringWithFormat:@"%@%@",model.value,model.unit];
+                    break;
+            }
+        }else{
+            cell.monitorData.text = @"NULL";
+        }
+        return cell;
     }
+        
+    
     
 }
 

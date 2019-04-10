@@ -62,8 +62,19 @@
     }
     return fieldInt;
 }
+/*
+ * 对Onenet获取的数据进行处理
+ */
++ (NSString *)valueFromFloat:(NSNumber *)value X1:(float)X1 X2:(float)X2 Y1:(float)Y1 Y2:(float)Y2 unit:(NSString *)unit{
+    
+    float k = (Y2-Y1)/(X2-X1);
+    float b = Y1-(Y2-Y1)*X1/(X2-X1);
+    
+    NSString *VF = [NSString stringWithFormat:@"%.2f%@",(k * [value floatValue] + b),unit];;
+    
+    return VF;
 
-
+}
 
 /*
  *用整数位小数位和单位组成数据string

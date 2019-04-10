@@ -13,5 +13,6 @@
 @property (nonatomic,strong) NSString *deviceGroupName;
 @property (nonatomic,strong) NSString *datapointGroupMac;
 @property (nonatomic,strong) NSNumber *datapointGroupId;
+@property (nonatomic,strong) NSNumber *datapointType;
 @property (nonatomic,strong) NSArray *cellArray;
 @end

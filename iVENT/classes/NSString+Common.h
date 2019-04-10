@@ -23,7 +23,7 @@
 + (int)stringScanToInt:(NSString *)str;
 + (int)hexToDecimal:(NSString *)str;
 + (NSString *)valueFromIntDecUnit:(NSNumber *)N value:(NSNumber *)value unit:(NSString *)unit;
-
++ (NSString *)valueFromFloat:(NSNumber *)value X1:(float)X1 X2:(float)X2 Y1:(float)Y1 Y2:(float)Y2 unit:(NSString *)unit;
 + (BOOL) validateMobile:(NSString *)mobile;
 + (BOOL) validateUserName:(NSString *)name;
 + (BOOL) validateEmail:(NSString *)email;

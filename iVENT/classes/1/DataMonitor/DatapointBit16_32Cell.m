@@ -53,18 +53,22 @@
 }
 
 - (void)doneAction{
-    if ([NSString String2long:_dataMonitorDataTF.text] > 4095) {
+    if ([NSString String2long:_dataMonitorDataTF.text] > 90) {
         if (self.block) {
-            self.block([NSString stringWithFormat:@"4095"]);
-            _dataMonitorDataTF.text = [NSString stringWithFormat:@"4095"];
+            self.block([NSString stringWithFormat:@"90"]);
+            _dataMonitorDataTF.text = [NSString stringWithFormat:@"90"];
             [NSObject showHudTipStr:LocalString(@"Input number more than limit")];
         }
     }else{
         if (self.block) {
-            self.block(_dataMonitorDataTF.text);
+            NSString *data = [NSString stringWithFormat:@"%d", [_dataMonitorDataTF.text intValue] *4095/90];
+            self.block(data);
         }
     }
-    
+    //开始刷新数据
+    if (self.block_timerstart) {
+        self.block_timerstart();
+    }
     [_dataMonitorDataTF resignFirstResponder];
 }
 
@@ -77,22 +81,17 @@
     [textField resignFirstResponder];
     return YES;
 }
-
+//停止刷新
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    //[_timer setFireDate:[NSDate distantFuture]];
     if (self.block_timerpause) {
         self.block_timerpause();
     }
-    
-    
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
-    //[_timer setFireDate:[NSDate date]];
-    if (self.block_timerstart) {
-        self.block_timerstart();
+    if (self.block_timerpause) {
+        self.block_timerpause();
     }
-    
 }
 
 - (void)TFchange:(UITextField *)textField{
