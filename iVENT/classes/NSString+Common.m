@@ -40,6 +40,38 @@
     return number;
 }
 
+/**
+ 十进制转换为二进制
+ @param decimal 十进制数
+ @return 二进制数
+ */
++ (NSString *)getBinaryByDecimal:(NSInteger)decimal {
+    
+    NSString *binary = @"";
+    while (decimal) {
+        
+        binary = [[NSString stringWithFormat:@"%ld", decimal % 2] stringByAppendingString:binary];
+        if (decimal / 2 < 1) {
+            
+            break;
+        }
+        decimal = decimal / 2 ;
+    }
+    if (binary.length % 4 != 0) {
+        
+        NSMutableString *mStr = [[NSMutableString alloc]init];;
+        for (int i = 0; i < 4 - binary.length % 4; i++) {
+            
+            [mStr appendString:@"0"];
+        }
+        binary = [mStr stringByAppendingString:binary];
+    }
+    if ([binary  isEqual: @""]) {
+        binary = 0;
+    }
+    return binary;
+}
+
 /*
  *输入型监控点控制要把输入的浮点数转化为整数上传
  */

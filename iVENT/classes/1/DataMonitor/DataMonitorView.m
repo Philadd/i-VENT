@@ -32,6 +32,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 @property (nonatomic, strong) NSMutableArray *sectionData;
 @property (nonatomic, strong) NSDictionary *plcModelJson;
 @property (nonatomic, strong) NSMutableArray *controledMonitors;
+@property (nonatomic, strong) NSMutableArray *IOArray;
 
 @property (strong, nonatomic) NSTimer *timer;
 @end
@@ -114,11 +115,6 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                 model.datapointGroupMac = J2String([obj objectForKey:@"mac"]);
                 model.datapointType = J2String([obj objectForKey:@"type"]);
                 
-                if (obj[@"mac"] && [obj[@"mac"] isKindOfClass:[NSNumber class]]) {
-                    model.datapointGroupId = obj[@"mac"];
-                }else{
-                    NSLog(@"datapointGroupId不是number类型");
-                }
                 NSMutableArray *array = [[NSMutableArray alloc] init];
                 [obj[@"streams"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     
@@ -528,7 +524,8 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 
             switch ([section.datapointType intValue]) {
                 case 3:   //IO模块
-                    cell.monitorData.text = [NSString stringWithFormat:@"%16u",[model.value intValue]];
+                    cell.monitorData.text = [NSString stringWithFormat:@"%16@",[NSString getBinaryByDecimal:[model.value intValue]]];
+                    NSLog(@"sfsfdsf%@",cell.monitorData.text);
                     break;
                 case 6:   //振动传感器
                     cell.monitorData.text = [NSString stringWithFormat:@"%.6f%@",[model.value floatValue],model.unit];
