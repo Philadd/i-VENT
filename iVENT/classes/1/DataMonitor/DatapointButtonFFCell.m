@@ -16,8 +16,14 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         if (!_dataMonitorName) {
             _dataMonitorName = [UILabel labelWithFont:[UIFont systemFontOfSize:13.0] textColor:[UIColor blackColor]];
-            _dataMonitorName.frame = CGRectMake(0, 15, ScreenWidth / 3.0, viewHeight - 30);
-            [self.contentView addSubview:_dataMonitorName];
+            _dataMonitorName.textAlignment = NSTextAlignmentCenter;
+            _dataMonitorName.adjustsFontSizeToFitWidth = YES;
+            [self.contentView addSubview:self.dataMonitorName];
+            [_dataMonitorName mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.size.mas_equalTo(CGSizeMake(yAutoFit(80.f),yAutoFit(15.f)));
+                make.centerY.equalTo(self.contentView.mas_centerY);
+                make.left.equalTo(self.contentView.mas_left).offset(yAutoFit(20.f));
+            }];
         }
         if (!_dataMonitorBtn) {
             _dataMonitorBtn = [[UIButton alloc] initWithFrame:CGRectMake(ScreenWidth / 3.0 * 2 + (ScreenWidth / 3.0 - 50)/2.0, (viewHeight - 30)/2.0, 50, 30)];

@@ -30,9 +30,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 @property (nonatomic, strong) UITableView *myTableView;
 
 @property (nonatomic, strong) NSMutableArray *sectionData;
-@property (nonatomic, strong) NSDictionary *plcModelJson;
 @property (nonatomic, strong) NSMutableArray *controledMonitors;
-@property (nonatomic, strong) NSMutableArray *IOArray;
 
 @property (strong, nonatomic) NSTimer *timer;
 @end
@@ -106,11 +104,11 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
 - (NSMutableArray *)sectionData:(NSDictionary *)dic{
     if (_sectionData == nil) {
         _sectionData = [[NSMutableArray alloc]init];
-        NSLog(@"监控%@",dic);
         if ([[dic objectForKey:@"data"] isKindOfClass:[NSArray class]] && [[dic objectForKey:@"data"] count] > 0) {
             [[dic objectForKey:@"data"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 DeviceSectionModel *model = [[DeviceSectionModel alloc] init];
+                
                 model.deviceGroupName = J2String([obj objectForKey:@"name"]);
                 model.datapointGroupMac = J2String([obj objectForKey:@"mac"]);
                 model.datapointType = J2String([obj objectForKey:@"type"]);
@@ -139,66 +137,15 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                         cell.streamUid = J2String(obj[@"streamUid"]);
                     }
                     
-                    if (obj[@"desc"]) {
-                        cell.desc = J2String(obj[@"desc"]);
-                    }
-                    
                     if (obj[@"dataType"]) {
                         cell.dataType = J2String(obj[@"dataType"]);
                     }
-                    if (obj[@"addressType"]) {
-                        cell.addressType = J2String(obj[@"addressType"]);
-                    }
-                    if (obj[@"bindDeviceType"]) {
-                        cell.bindDeviceType = J2String(obj[@"bindDeviceType"]);
-                    }
-                    if (obj[@"bindDeviceName"]) {
-                        cell.bindDeviceName = J2String(obj[@"bindDeviceName"]);
-                    }
-                    if (obj[@"modbusCode"]) {
-                        cell.modbusCode = J2String(obj[@"modbusCode"]);
-                    }
-                    if (obj[@"cmd"]) {
-                        NSDictionary *cmdDic = obj[@"cmd"];
-                        if (cmdDic[@"protocol"]) {
-                            cell.protocol = J2String(cmdDic[@"protocol"]);
-                        }
-                    }
-                    if (obj[@"state"] && [obj[@"state"] isKindOfClass:[NSNumber class]]) {
-                        cell.state = obj[@"state"];
-                    }else{
-                        NSLog(@"state不是number类型");
-                    }
-                    if (obj[@"intBit"] && [obj[@"intBit"] isKindOfClass:[NSNumber class]]) {
-                        cell.intBit = obj[@"intBit"];
-                    }else{
-                        NSLog(@"intBit不是number类型");
-                    }
-                    if (obj[@"decimalBit"] && [obj[@"decimalBit"] isKindOfClass:[NSNumber class]]) {
-                        cell.decimalBit = obj[@"decimalBit"];
-                    }else{
-                        NSLog(@"decimalBit不是number类型");
-                    }
-                    if (obj[@"address"] && [obj[@"address"] isKindOfClass:[NSNumber class]]) {
-                        cell.address = obj[@"address"];
-                    }else{
-                        NSLog(@"address不是number类型");
-                    }
-                    if (obj[@"slaveAdr"] && [obj[@"slaveAdr"] isKindOfClass:[NSNumber class]]) {
-                        cell.slaveAdr = obj[@"slaveAdr"];
-                    }else{
-                        NSLog(@"slaveAdr不是number类型");
-                    }
-                    if (obj[@"modbusRegisterAdd"] && [obj[@"modbusRegisterAdd"] isKindOfClass:[NSNumber class]]) {
-                        cell.modbusRegisterAdd = obj[@"modbusRegisterAdd"];
-                    }else{
-                        NSLog(@"modbusRegisterAdd不是number类型");
-                    }
-                    
+        
                     if ([FarmDatabase shareInstance].deviceDicOnenet) {
                         NSArray *onenetDatapoints = [[NSArray alloc] init];
                         onenetDatapoints = [[[[FarmDatabase shareInstance].deviceDicOnenet objectForKey:@"data"] objectForKey:@"devices"] copy];
                         [[onenetDatapoints[0] objectForKey:@"datastreams"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                            NSLog(@"%@",[onenetDatapoints[0] objectForKey:@"datastreams"]);
                             if (obj[@"id"] && [obj[@"id"] isEqualToString:[NSString stringWithFormat:@"8%@",[cell.streamId substringWithRange:NSMakeRange(1, 3)]]]) {
                                 if (obj[@"value"] && ![obj[@"value"] intValue]) {
                                     cell.isUnusual = 1;//表示数据异常
@@ -278,11 +225,23 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                         }];
                     }
                     
+                    if ([model.datapointType intValue] == 3) {
+                        //int value = 0xffff;
+                        int value = [obj[@"value"] intValue];
+                        for (int i= 1; i< 17 ; i++) {
+                            DeviceCellModel *cell = [[DeviceCellModel alloc] init];
+                            cell.streamName = [NSString stringWithFormat:@"%d",i];
+                            cell.value = [NSNumber numberWithInt:value & 0x01];
+                            value = value >> 1;
+                            NSLog(@"%4x",value);
+                            [array addObject:cell];
+                        }
+                    }
                     [array addObject:cell];
                 }];
                 model.cellArray = [array copy];
                 [_sectionData addObject:model];
-                NSLog(@"我的数组%@",model.cellArray);
+                //NSLog(@"我的数组%@",model.cellArray);
                 
             }];
         }
@@ -427,10 +386,17 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         cell.dataMonitorName.text = model.streamName;
         if (model.value) {
             switch ([section.datapointType intValue]) {
-                case 3:   //IO模块
-                    cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%16u",[model.value intValue]];
-                    cell.uintData.text = [NSString stringWithFormat:@"%@",@""];
+                case 3:
+                {//IO模块
+                    if ([model.value intValue] == 0) {
+                        cell.dataMonitorDataTF.text = @"关";
+                        cell.uintData.text = [NSString stringWithFormat:@"%@",@""];
+                    }else{
+                        cell.dataMonitorDataTF.text = @"开";
+                        cell.uintData.text = [NSString stringWithFormat:@"%@",@""];
+                    }
                     break;
+                }
                 case 4:   //变频器
                     cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%u",[model.value intValue]];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",model.unit];
@@ -527,10 +493,15 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         if (model.value) {
 
             switch ([section.datapointType intValue]) {
-                case 3:   //IO模块
-                    cell.monitorData.text = [NSString stringWithFormat:@"%16@",[NSString getBinaryByDecimal:[model.value intValue]]];
-                    NSLog(@"sfsfdsf%@",cell.monitorData.text);
+                case 3:
+                {//IO模块
+                    if ([model.value intValue] == 0) {
+                        cell.monitorData.text = @"关";
+                    }else{
+                        cell.monitorData.text = @"开";
+                    }
                     break;
+                }
                 case 4:   //变频器
                     cell.monitorData.text = [NSString stringWithFormat:@"%@%@",model.value,model.unit];
                     break;

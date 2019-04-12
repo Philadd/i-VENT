@@ -191,7 +191,6 @@ static int apiKeyArrayCount = 0;
 }
 
 - (void)loadData{
-    NSLog(@"分区数据%@",_sectionData);
     for (SectionModel *section in _sectionData) {
         for (CellModel *cell in section.cellArray) {
             BMKPointAnnotation *annotation = [[BMKPointAnnotation alloc] init];

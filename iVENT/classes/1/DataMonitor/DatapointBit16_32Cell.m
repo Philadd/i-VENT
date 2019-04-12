@@ -51,6 +51,8 @@
         if (!_uintData) {
             _uintData = [[UILabel alloc] init];
             _uintData = [UILabel labelWithFont:[UIFont systemFontOfSize:13.0] textColor:[UIColor blackColor]];
+            _uintData.adjustsFontSizeToFitWidth = YES;
+            _uintData.textAlignment = NSTextAlignmentLeft;
             [self.contentView addSubview:self.uintData];
             
             [_uintData mas_makeConstraints:^(MASConstraintMaker *make) {
