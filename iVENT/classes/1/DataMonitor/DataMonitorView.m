@@ -228,10 +228,10 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     if ([model.datapointType intValue] == 3) {
                         //int value = 0xffff;
                         int value = [obj[@"value"] intValue];
-                        for (int i= 1; i< 17 ; i++) {
+                        for (int i= 0; i< 16 ; i++) {
                             DeviceCellModel *cell = [[DeviceCellModel alloc] init];
-                            cell.streamName = [NSString stringWithFormat:@"%d",i];
-                            cell.value = [NSNumber numberWithInt:value & 0x01];
+                            cell.streamName = [NSString stringWithFormat:@"%d",i+1];
+                            cell.value = [NSNumber numberWithInt: ~(value & 0x01)];
                             value = value >> 1;
                             NSLog(@"%4x",value);
                             [array addObject:cell];
