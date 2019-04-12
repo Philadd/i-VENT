@@ -18,13 +18,25 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         if (!_deviceName) {
             _deviceName = [UILabel labelWithFont:[UIFont systemFontOfSize:13.0] textColor:[UIColor blackColor]];
-            _deviceName.frame = CGRectMake(0, 15, ScreenWidth / 3.0, viewHeight - 30);
+            _deviceName.textAlignment = NSTextAlignmentCenter;
+            _deviceName.adjustsFontSizeToFitWidth = YES;
             [self.contentView addSubview:self.deviceName];
+            [_deviceName mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.size.mas_equalTo(CGSizeMake(yAutoFit(80.f),yAutoFit(15.f)));
+                make.centerY.equalTo(self.contentView.mas_centerY);
+                make.left.equalTo(self.contentView.mas_left).offset(yAutoFit(20.f));
+            }];
         }
         if (!_monitorData) {
             _monitorData = [UILabel labelWithFont:[UIFont systemFontOfSize:13.0] textColor:[UIColor blackColor]];
-            _monitorData.frame = CGRectMake(ScreenWidth / 3.0 * 2, 15, ScreenWidth / 3.0, viewHeight - 30);
+            _monitorData.textAlignment = NSTextAlignmentCenter;
+            _monitorData.adjustsFontSizeToFitWidth = YES;
             [self.contentView addSubview:self.monitorData];
+            [_monitorData mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.size.mas_equalTo(CGSizeMake(yAutoFit(80.f),yAutoFit(15.f)));
+                make.centerY.equalTo(self.contentView.mas_centerY);
+                make.right.equalTo(self.contentView.mas_right).offset(yAutoFit(-10.f));
+            }];
         }
     }
     return self;

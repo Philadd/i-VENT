@@ -23,18 +23,30 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(done) name:@"dataMonitorDataTFDone" object:nil];
         if (!_dataMonitorName) {
             _dataMonitorName = [UILabel labelWithFont:[UIFont systemFontOfSize:13.0] textColor:[UIColor blackColor]];
-            _dataMonitorName.frame = CGRectMake(0, 15, ScreenWidth / 3.0, viewHeight - 30);
-            [self.contentView addSubview:_dataMonitorName];
+            _dataMonitorName.textAlignment = NSTextAlignmentCenter;
+            _dataMonitorName.adjustsFontSizeToFitWidth = YES;
+            [self.contentView addSubview:self.dataMonitorName];
+            [_dataMonitorName mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.size.mas_equalTo(CGSizeMake(yAutoFit(80.f),yAutoFit(15.f)));
+                make.centerY.equalTo(self.contentView.mas_centerY);
+                make.left.equalTo(self.contentView.mas_left).offset(yAutoFit(20.f));
+            }];
         }
         if (!_dataMonitorDataTF) {
-            _dataMonitorDataTF = [[UITextField alloc] initWithFrame:CGRectMake(ScreenWidth / 3.0 * 2 + (ScreenWidth / 3.0 - 90)/2.0, 5, 90, viewHeight - 10)];
+            _dataMonitorDataTF = [[UITextField alloc] init];
             _dataMonitorDataTF.textAlignment = NSTextAlignmentCenter;
             _dataMonitorDataTF.keyboardType = UIKeyboardTypeDecimalPad;
             _dataMonitorDataTF.font = [UIFont systemFontOfSize:13.0];
             _dataMonitorDataTF.delegate = self;
+            _dataMonitorDataTF.adjustsFontSizeToFitWidth = YES;
             [_dataMonitorDataTF addDoneOnKeyboardWithTarget:self action:@selector(doneAction)];
             [_dataMonitorDataTF addTarget:self action:@selector(TFchange:) forControlEvents:UIControlEventEditingChanged];
             [self.contentView addSubview:_dataMonitorDataTF];
+            [_dataMonitorDataTF mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.size.mas_equalTo(CGSizeMake(yAutoFit(80.f),yAutoFit(15.f)));
+                make.centerY.equalTo(self.contentView.mas_centerY);
+                make.right.equalTo(self.contentView.mas_right).offset(yAutoFit(-10.f));
+            }];
         }
         if (!_uintData) {
             _uintData = [[UILabel alloc] init];
@@ -42,9 +54,9 @@
             [self.contentView addSubview:self.uintData];
             
             [_uintData mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.size.mas_equalTo(CGSizeMake(yAutoFit(viewHeight - 10),yAutoFit(viewHeight - 10)));
+                make.size.mas_equalTo(CGSizeMake(yAutoFit(15.f),yAutoFit(15.f)));
                 make.centerY.equalTo(self.contentView.mas_centerY);
-                make.right.equalTo(self.dataMonitorDataTF.mas_right).offset(5);
+                make.right.equalTo(self.contentView.mas_right).offset(yAutoFit(-10.f));
             }];
         }
         

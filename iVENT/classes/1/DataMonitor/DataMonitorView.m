@@ -431,6 +431,10 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%16u",[model.value intValue]];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",@""];
                     break;
+                case 4:   //变频器
+                    cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%u",[model.value intValue]];
+                    cell.uintData.text = [NSString stringWithFormat:@"%@",model.unit];
+                    break;
                 case 6:   //振动传感器
                     cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%.6f",[model.value floatValue]];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",model.unit];
@@ -526,6 +530,9 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                 case 3:   //IO模块
                     cell.monitorData.text = [NSString stringWithFormat:@"%16@",[NSString getBinaryByDecimal:[model.value intValue]]];
                     NSLog(@"sfsfdsf%@",cell.monitorData.text);
+                    break;
+                case 4:   //变频器
+                    cell.monitorData.text = [NSString stringWithFormat:@"%@%@",model.value,model.unit];
                     break;
                 case 6:   //振动传感器
                     cell.monitorData.text = [NSString stringWithFormat:@"%.6f%@",[model.value floatValue],model.unit];
