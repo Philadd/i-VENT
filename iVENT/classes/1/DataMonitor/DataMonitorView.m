@@ -488,25 +488,49 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
             //判断用户对这个网关的权限
             cell.dataMonitorSwitch.enabled = NO;
         }
-        
-        if ([model.bindDeviceType isEqualToString:@"local"]){
-            if ([model.value intValue]) {
-                cell.dataMonitorSwitch.on = YES;
-            }else{
-                cell.dataMonitorSwitch.on = NO;
-            }
+        if (model.value) {
+            cell.dataMonitorSwitch.on = YES;
         }else{
-            if ([model.value intValue] % 2) {
-                cell.dataMonitorSwitch.on = YES;
-            }else{
-                cell.dataMonitorSwitch.on = NO;
-            }
+            cell.dataMonitorSwitch.on = NO;
         }
-        cell.dataMonitorSwitch.enabled = NO;
+        cell.block = ^(BOOL isOn) {
+            
+            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+            [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            NSNumber *value = [NSNumber numberWithInt:isOn];
+            NSDictionary *parameters = @{@"sn":[FarmDatabase shareInstance].sn,@"mac":section.datapointGroupMac,@"streamId":model.streamId,@"value":value};
+            [manager POST:@"http://rijin.thingcom.com:80/api/v1/device/order" parameters:parameters progress:nil
+                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                      NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+                      NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+                      NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+                      // NSLog(@"success:%@",daetr);
+                      
+                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                      NSLog(@"Error:%@",error);
+                  }];
+        };
         return cell;
     }else if ([model.dataType intValue] == 2){
         DatapointButtonFFCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier_DatapointButtonFF];
         cell.dataMonitorName.text = model.streamName;
+        cell.block = ^(NSString *dataFF) {
+
+            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+            [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            NSNumber *value = [NSNumber numberWithInt:[NSString String2long:dataFF]];
+            NSDictionary *parameters = @{@"sn":[FarmDatabase shareInstance].sn,@"mac":section.datapointGroupMac,@"streamId":model.streamId,@"value":value};
+            [manager POST:@"http://rijin.thingcom.com:80/api/v1/device/order" parameters:parameters progress:nil
+                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                      NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+                      NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+                      NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+                      // NSLog(@"success:%@",daetr);
+                      
+                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                      NSLog(@"Error:%@",error);
+                  }];
+        };
         return cell;
         
     }else{

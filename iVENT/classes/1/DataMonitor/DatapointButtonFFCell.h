@@ -9,13 +9,13 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
-typedef void(^CallBackBlock)(BOOL);
+typedef void(^CallBlock)(NSString *);
 
 @interface DatapointButtonFFCell : UITableViewCell
 
 @property (strong,nonatomic) UILabel *dataMonitorName;
 @property (strong,nonatomic) UIButton *dataMonitorBtn;
-@property (nonatomic,strong) CallBackBlock block;
+@property (nonatomic,strong) CallBlock block;
 
 @end
 
