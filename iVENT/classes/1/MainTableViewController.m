@@ -133,7 +133,6 @@ static int apiKeyArrayCount = 0;
             _apiKeyArray = [[NSMutableArray alloc] init];
         }
         _sectionData = [[NSMutableArray alloc]init];
-        NSLog(@"获取用户信息数据%@",dic);
         if ([[dic objectForKey:@"data"] isKindOfClass:[NSArray class]] && [[dic objectForKey:@"data"] count] > 0) {
             [[dic objectForKey:@"data"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 SectionModel *model = [[SectionModel alloc] init];
@@ -197,10 +196,8 @@ static int apiKeyArrayCount = 0;
                 [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                     NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
                     NSDictionary *oneNETDic = responseDic[@"data"];
-                    NSLog(@"onenetdic%@",oneNETDic);
                     if ([oneNETDic[@"devices"] isKindOfClass:[NSArray class]]) {
                         [onenetDevicesArray addObjectsFromArray:oneNETDic[@"devices"]];
-                        NSLog(@"devices%@",oneNETDic[@"devices"]);
                     }else{
                         NSLog(@"devices不是一个数组");
                     }
@@ -211,7 +208,6 @@ static int apiKeyArrayCount = 0;
                         for (SectionModel *section in _sectionData) {
                             for (CellModel *cell in section.cellArray) {
                                 for (NSDictionary *deviceInfo in onenetDevicesArray) {
-                                    NSLog(@"在线nslog%@",deviceInfo);
                                     if ([cell.deviceId isEqualToString:deviceInfo[@"id"]]) {
                                         cell.online = deviceInfo[@"online"];
                                     }
@@ -321,7 +317,6 @@ static int apiKeyArrayCount = 0;
             NSLog(@"我的信息%@ %@",cell.deviceId,cell.apiKey);
             Url = [Url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet];
             [manager1 GET:Url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                NSLog(@"onenet返回值%@",responseObject);
                 NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
                 [[FarmDatabase shareInstance] setDeviceDicOnenet:responseDic];
                 NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];

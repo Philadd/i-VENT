@@ -124,7 +124,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                         cell.streamId = J2String(obj[@"streamId"]);
                     }
                     if (obj[@"rw"]) {
-                        cell.writeRead = J2String(obj[@"rw"]);
+                        cell.writeRead = J2Number(obj[@"rw"]);
                         
                     }
                     if (obj[@"unit"]) {
@@ -138,14 +138,13 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     }
                     
                     if (obj[@"dataType"]) {
-                        cell.dataType = J2String(obj[@"dataType"]);
+                        cell.dataType = J2Number(obj[@"dataType"]);
                     }
         
                     if ([FarmDatabase shareInstance].deviceDicOnenet) {
                         NSArray *onenetDatapoints = [[NSArray alloc] init];
                         onenetDatapoints = [[[[FarmDatabase shareInstance].deviceDicOnenet objectForKey:@"data"] objectForKey:@"devices"] copy];
                         [[onenetDatapoints[0] objectForKey:@"datastreams"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                            NSLog(@"%@",[onenetDatapoints[0] objectForKey:@"datastreams"]);
                             if (obj[@"id"] && [obj[@"id"] isEqualToString:[NSString stringWithFormat:@"8%@",[cell.streamId substringWithRange:NSMakeRange(1, 3)]]]) {
                                 if (obj[@"value"] && ![obj[@"value"] intValue]) {
                                     cell.isUnusual = 1;//表示数据异常
@@ -194,7 +193,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                                                                  NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
                                                                  NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
                                                                  
-                                                                 NSLog(@"success:%@",daetr);
+                                                                 //NSLog(@"success:%@",daetr);
                                                              } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                                                                  NSLog(@"Error:%@",error);
                                                              }];
@@ -230,15 +229,38 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                         int value = [obj[@"value"] intValue];
                         for (int i= 0; i< 16 ; i++) {
                             DeviceCellModel *cell = [[DeviceCellModel alloc] init];
-                            cell.streamName = [NSString stringWithFormat:@"%d",i+1];
-                            cell.value = [NSNumber numberWithInt: ~(value & 0x01)];
+                            cell.streamName = [NSString stringWithFormat:@"%d",16-i];
+                            cell.value = [NSNumber numberWithInt:value & 0x01];
                             value = value >> 1;
-                            NSLog(@"%4x",value);
+                            if (obj[@"streamId"]) {
+                                cell.streamId = J2String(obj[@"streamId"]);
+                            }
+                            if (obj[@"rw"]) {
+                                cell.writeRead = J2Number(obj[@"rw"]);
+                                
+                            }
+                            if (obj[@"unit"]) {
+                                cell.unit = J2String(obj[@"unit"]);
+                            }
+                            if (obj[@"sn"]) {
+                                cell.sn = J2String(obj[@"sn"]);
+                            }
+                            if (obj[@"streamUid"]) {
+                                cell.streamUid = J2String(obj[@"streamUid"]);
+                            }
+                            
+                            if (obj[@"dataType"]) {
+                                cell.dataType = J2Number(obj[@"dataType"]);
+                            }
                             [array addObject:cell];
                         }
+                    }else{
+                        [array addObject:cell];
                     }
-                    [array addObject:cell];
                 }];
+                if ([model.datapointType intValue] == 3) {
+                    array = (NSMutableArray *)[[array reverseObjectEnumerator] allObjects];
+                }
                 model.cellArray = [array copy];
                 [_sectionData addObject:model];
                 //NSLog(@"我的数组%@",model.cellArray);
@@ -277,7 +299,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
         NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
         NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"success:%@",daetr);
+        //NSLog(@"success:%@",daetr);
         [[FarmDatabase shareInstance] setDeviceDic:responseDic];
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -387,7 +409,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         if (model.value) {
             switch ([section.datapointType intValue]) {
                 case 3:
-                {//IO模块
+                {//IO模块 0关 1开
                     if ([model.value intValue] == 0) {
                         cell.dataMonitorDataTF.text = @"关";
                         cell.uintData.text = [NSString stringWithFormat:@"%@",@""];
@@ -448,15 +470,15 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
             NSDictionary *parameters = @{@"sn":[FarmDatabase shareInstance].sn,@"mac":section.datapointGroupMac,@"streamId":model.streamId,@"value":value};
             
             [manager POST:@"http://rijin.thingcom.com:80/api/v1/device/order" parameters:parameters progress:nil
-                    success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                        NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
-                        NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
-                        NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-                        NSLog(@"success:%@",daetr);
-                        
-                    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                        NSLog(@"Error:%@",error);
-                    }];
+                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                      NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
+                      NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
+                      NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+                      NSLog(@"success:%@",daetr);
+                      
+                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                      NSLog(@"Error:%@",error);
+                  }];
         };
         return cell;
     }else if ([model.dataType intValue] == 1){
@@ -533,8 +555,6 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         }
         return cell;
     }
-        
-    
     
 }
 

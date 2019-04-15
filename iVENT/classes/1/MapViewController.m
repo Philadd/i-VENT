@@ -154,10 +154,8 @@ static int apiKeyArrayCount = 0;
                 [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                     NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
                     NSDictionary *oneNETDic = responseDic[@"data"];
-                    NSLog(@"onenetdic%@",oneNETDic);
                     if ([oneNETDic[@"devices"] isKindOfClass:[NSArray class]]) {
                         [onenetDevicesArray addObjectsFromArray:oneNETDic[@"devices"]];
-                        NSLog(@"devices%@",oneNETDic[@"devices"]);
                     }else{
                         NSLog(@"devices不是一个数组");
                     }
@@ -168,7 +166,6 @@ static int apiKeyArrayCount = 0;
                         for (SectionModel *section in _sectionData) {
                             for (CellModel *cell in section.cellArray) {
                                 for (NSDictionary *deviceInfo in onenetDevicesArray) {
-                                    NSLog(@"在线nslog%@",deviceInfo);
                                     if ([cell.deviceId isEqualToString:deviceInfo[@"id"]]) {
                                         cell.online = deviceInfo[@"online"];
                                     }
