@@ -225,11 +225,11 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     }
                     
                     if ([model.datapointType intValue] == 3) {
-                        //int value = 0xffff;
+                        //int value = 0xfff;
                         int value = [obj[@"value"] intValue];
-                        for (int i= 0; i< 16 ; i++) {
+                        for (int i= 0; i< 12 ; i++) {
                             DeviceCellModel *cell = [[DeviceCellModel alloc] init];
-                            cell.streamName = [NSString stringWithFormat:@"%d",16-i];
+                            cell.streamName = [NSString stringWithFormat:@"%d",12-i];
                             cell.value = [NSNumber numberWithInt:value & 0x01];
                             value = value >> 1;
                             if (obj[@"streamId"]) {

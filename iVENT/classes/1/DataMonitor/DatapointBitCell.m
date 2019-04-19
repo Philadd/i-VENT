@@ -28,9 +28,20 @@
             }];
         }
         if (!_dataMonitorSwitch) {
-            _dataMonitorSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(ScreenWidth / 3.0 * 2 + (ScreenWidth / 3.0 - 50)/2.0, (viewHeight - 30)/2.0, 50, 30)];
+            _dataMonitorSwitch = [[UISwitch alloc] init];
+            _dataMonitorSwitch.transform = CGAffineTransformMakeScale(1, 1);
+            [_dataMonitorSwitch setOn:NO animated:YES];
             [_dataMonitorSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
             [self.contentView addSubview:_dataMonitorSwitch];
+            [_dataMonitorSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.right.equalTo(self.contentView.mas_right).offset(yAutoFit(-16.f));
+                make.centerY.equalTo(self.contentView.mas_centerY);
+            }];
+            _dataMonitorSwitch.tintColor = [UIColor colorWithHexString:@"A8A5A5"];
+            _dataMonitorSwitch.onTintColor = [UIColor colorWithHexString:@"3987F8"];
+            _dataMonitorSwitch.backgroundColor = [UIColor colorWithHexString:@"A8A5A5"];
+            _dataMonitorSwitch.layer.cornerRadius = 15.5f;
+            _dataMonitorSwitch.layer.masksToBounds = YES;
         }
     }
     return self;
