@@ -13,6 +13,10 @@
 		364A88DB225C392000ECE479 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 364A88D9225C391F00ECE479 /* AppDelegate.m */; };
 		364A88DE225C399A00ECE479 /* NSString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 364A88DC225C399A00ECE479 /* NSString+Common.m */; };
 		364A88E1225C39B500ECE479 /* UIColor+ColorChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 364A88DF225C39B400ECE479 /* UIColor+ColorChange.m */; };
+		366C6A36226D9B1500AA1381 /* anniu@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 366C6A34226D9B1500AA1381 /* anniu@1x.png */; };
+		366C6A37226D9B1500AA1381 /* anniu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 366C6A35226D9B1500AA1381 /* anniu@2x.png */; };
+		366C6A3A226DA25C00AA1381 /* zhiFFON@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 366C6A38226DA25C00AA1381 /* zhiFFON@2x.png */; };
+		366C6A3B226DA25C00AA1381 /* zhiFFOFF@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 366C6A39226DA25C00AA1381 /* zhiFFOFF@2x.png */; };
 		36770F83223F484E0013A6E1 /* PasswordTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36770F7B223F484E0013A6E1 /* PasswordTFCell.m */; };
 		36770F84223F484E0013A6E1 /* PhoneTFCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36770F7E223F484E0013A6E1 /* PhoneTFCell.m */; };
 		36770F85223F484E0013A6E1 /* PhoneVerityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36770F81223F484E0013A6E1 /* PhoneVerityCell.m */; };
@@ -220,6 +224,10 @@
 		364A88DD225C399A00ECE479 /* NSString+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Common.h"; path = "iVENT/classes/NSString+Common.h"; sourceTree = SOURCE_ROOT; };
 		364A88DF225C39B400ECE479 /* UIColor+ColorChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+ColorChange.m"; path = "iVENT/classes/UIColor+ColorChange.m"; sourceTree = SOURCE_ROOT; };
 		364A88E0225C39B500ECE479 /* UIColor+ColorChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+ColorChange.h"; path = "iVENT/classes/UIColor+ColorChange.h"; sourceTree = SOURCE_ROOT; };
+		366C6A34226D9B1500AA1381 /* anniu@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "anniu@1x.png"; sourceTree = "<group>"; };
+		366C6A35226D9B1500AA1381 /* anniu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "anniu@2x.png"; sourceTree = "<group>"; };
+		366C6A38226DA25C00AA1381 /* zhiFFON@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zhiFFON@2x.png"; sourceTree = "<group>"; };
+		366C6A39226DA25C00AA1381 /* zhiFFOFF@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zhiFFOFF@2x.png"; sourceTree = "<group>"; };
 		36770F7B223F484E0013A6E1 /* PasswordTFCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordTFCell.m; sourceTree = "<group>"; };
 		36770F7C223F484E0013A6E1 /* PhoneTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneTFCell.h; sourceTree = "<group>"; };
 		36770F7D223F484E0013A6E1 /* PasswordTFCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasswordTFCell.h; sourceTree = "<group>"; };
@@ -735,6 +743,10 @@
 		3E4FE4901F276425001DCBE2 /* pic */ = {
 			isa = PBXGroup;
 			children = (
+				366C6A39226DA25C00AA1381 /* zhiFFOFF@2x.png */,
+				366C6A38226DA25C00AA1381 /* zhiFFON@2x.png */,
+				366C6A34226D9B1500AA1381 /* anniu@1x.png */,
+				366C6A35226D9B1500AA1381 /* anniu@2x.png */,
 				BB2F8BFA20BEA9DA00028BBD /* 播放@2x.png */,
 				BB35CA32207C6E5A0094BD36 /* 收起@2x.png */,
 				BB2367B5206C8940002CB19A /* offline@2x.png */,
@@ -1143,6 +1155,7 @@
 				BB3A92A82059475D00811A9B /* preview_recording@2x.png in Resources */,
 				BB3A92D02059475D00811A9B /* preview_talkback_dis@2x.png in Resources */,
 				BB3A92B22059475D00811A9B /* preview_screenshot.png in Resources */,
+				366C6A37226D9B1500AA1381 /* anniu@2x.png in Resources */,
 				BB3A92CD2059475D00811A9B /* preview_voice_btn_sel@2x.png in Resources */,
 				BB5DCD9E205CFE9E00095D71 /* unusual@2x.png in Resources */,
 				BB3A92A42059475D00811A9B /* preview_barrel.png in Resources */,
@@ -1180,14 +1193,17 @@
 				BB24664520495BDB00EA39AE /* NickNameTableViewCell.xib in Resources */,
 				BB5DCDA4205D056500095D71 /* user_women@1x.png in Resources */,
 				BB3A92D92059475D00811A9B /* preview_barrel_dis@2x.png in Resources */,
+				366C6A3A226DA25C00AA1381 /* zhiFFON@2x.png in Resources */,
 				BB4AF137205F58FB0031F3B2 /* login_password@1x.png in Resources */,
 				3E4FE45E1F274260001DCBE2 /* Assets.xcassets in Resources */,
 				BB9268412069E8E70052BCC7 /* mapapi.bundle in Resources */,
+				366C6A36226D9B1500AA1381 /* anniu@1x.png in Resources */,
 				BB3A92AF2059475D00811A9B /* preview_screenshot_dis@2x.png in Resources */,
 				BB5C786B2062641200C40795 /* background@2x.png in Resources */,
 				3E4FE45C1F274260001DCBE2 /* Main.storyboard in Resources */,
 				BB799742206BC4F20094A749 /* Icon-Small@2x.png in Resources */,
 				BB3A92A92059475D00811A9B /* preview_barrel@2x.png in Resources */,
+				366C6A3B226DA25C00AA1381 /* zhiFFOFF@2x.png in Resources */,
 				BB2F8BFB20BEA9DA00028BBD /* 播放@2x.png in Resources */,
 				3ED73F4C1FE22A85007A2AD4 /* 二维码@1x.png in Resources */,
 				BB3A92C82059475D00811A9B /* preview_stoppaly_btn_sel.png in Resources */,

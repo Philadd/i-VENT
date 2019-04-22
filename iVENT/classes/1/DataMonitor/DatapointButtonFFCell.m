@@ -26,18 +26,33 @@
             }];
         }
         if (!_dataMonitorBtn) {
-            _dataMonitorBtn = [[UIButton alloc] initWithFrame:CGRectMake(ScreenWidth / 3.0 * 2 + (ScreenWidth / 3.0 - 50)/2.0, (viewHeight - 30)/2.0, 50, 30)];
-            [_dataMonitorBtn addTarget:self action:@selector(addAction) forControlEvents:UIControlEventValueChanged];
+            _dataMonitorBtn = [[UIButton alloc] init];
+            [_dataMonitorBtn setImage:[UIImage imageNamed:@"zhiFFOFF"] forState:UIControlStateNormal];
+            [_dataMonitorBtn addTarget:self action:@selector(addAction) forControlEvents:UIControlEventTouchUpInside];
+            _dataMonitorBtn.tag = yUnselect;//默认隐藏，选择后显示
             [self.contentView addSubview:_dataMonitorBtn];
+            [_dataMonitorBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.size.mas_equalTo(CGSizeMake(yAutoFit(35.f),yAutoFit(35.f)));
+                make.centerY.equalTo(self.contentView.mas_centerY);
+                make.right.equalTo(self.contentView.mas_right).offset(yAutoFit(-30.f));
+            }];
         }
     }
     return self;
 }
 
 - (void)addAction{
-        if (self.block) {
-            NSString *data = [NSString stringWithFormat:@"%d",255];
-            self.block(data);
-        }
+    if (self.block) {
+        NSString *data = [NSString stringWithFormat:@"%d",255];
+        self.block(data);
+    }
+    if (_dataMonitorBtn.tag == yUnselect) {
+        _dataMonitorBtn.tag = ySelect;
+        [_dataMonitorBtn setImage:[UIImage imageNamed:@"zhiFFON"] forState:UIControlStateNormal];
+        
+    }else{
+        _dataMonitorBtn.tag = yUnselect;
+        [_dataMonitorBtn setImage:[UIImage imageNamed:@"zhiFFOFF"] forState:UIControlStateNormal];
+    }
 }
 @end

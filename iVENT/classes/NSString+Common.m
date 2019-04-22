@@ -108,6 +108,17 @@
 
 }
 
++ (NSString *)valueFromFloatSend:(NSNumber *)value X1:(float)X1 X2:(float)X2 Y1:(float)Y1 Y2:(float)Y2{
+    
+    float k = (Y2-Y1)/(X2-X1);
+    float b = Y1-(Y2-Y1)*X1/(X2-X1);
+    
+    NSString *VF = [NSString stringWithFormat:@"%.2f",(([value floatValue] - b)/k)];
+    
+    return VF;
+    
+}
+
 /*
  *用整数位小数位和单位组成数据string
  */

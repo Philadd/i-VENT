@@ -67,16 +67,15 @@
 }
 
 - (void)doneAction{
-    if ([NSString String2long:_dataMonitorDataTF.text] > 90) {
+    if ([NSString String2long:_dataMonitorDataTF.text] > 65535) {
         if (self.block) {
-            self.block([NSString stringWithFormat:@"90"]);
-            _dataMonitorDataTF.text = [NSString stringWithFormat:@"90"];
+            self.block([NSString stringWithFormat:@"65535"]);
+            _dataMonitorDataTF.text = [NSString stringWithFormat:@"65535"];
             [NSObject showHudTipStr:LocalString(@"Input number more than limit")];
         }
     }else{
         if (self.block) {
-            NSString *data = [NSString stringWithFormat:@"%d", [_dataMonitorDataTF.text intValue] *4095/90];
-            self.block(data);
+            self.block(_dataMonitorDataTF.text);
         }
     }
     //开始刷新数据

@@ -465,9 +465,14 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         };
         cell.block = ^(NSString *fieldText) {
             AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+            NSNumber *dataValue;
+            if ([section.datapointType intValue] == 7) {
+                dataValue = [NSNumber numberWithInt:[[NSString valueFromFloatSend:[NSNumber numberWithInt:[fieldText intValue]] X1:0 X2:4095 Y1:0 Y2:90] intValue]];
+            }
+            
             [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-            NSNumber *value = [NSNumber numberWithInt:[NSString String2long:fieldText]];
-            NSDictionary *parameters = @{@"sn":[FarmDatabase shareInstance].sn,@"mac":section.datapointGroupMac,@"streamId":model.streamId,@"value":value};
+            //NSNumber *value = [NSNumber numberWithInt:[NSString String2long:fieldText]];
+            NSDictionary *parameters = @{@"sn":[FarmDatabase shareInstance].sn,@"mac":section.datapointGroupMac,@"streamId":model.streamId,@"value":dataValue};
             
             [manager POST:@"http://rijin.thingcom.com:80/api/v1/device/order" parameters:parameters progress:nil
                   success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

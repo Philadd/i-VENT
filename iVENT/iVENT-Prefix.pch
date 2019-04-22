@@ -53,5 +53,11 @@
 #define viewWidth self.contentView.frame.size.width
 #define viewHeight self.contentView.frame.size.height
 //#define yColor_back @"5C5E66"
+typedef enum  NSUInteger {
+    yUnselect = 1000,
+    ySelect,
+    yUp,
+    yDown,
+} selectionStatus;
 
 #endif /* YSZfarm_Prefix_pch */
