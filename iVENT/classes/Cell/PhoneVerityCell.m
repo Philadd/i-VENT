@@ -25,6 +25,7 @@
             _codeTF.clearButtonMode = UITextFieldViewModeWhileEditing;
             _codeTF.autocorrectionType = UITextAutocorrectionTypeNo;
             _codeTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+            _codeTF.keyboardType = UIKeyboardTypeNumberPad;
             //设置为YES时文本会自动缩小以适应文本窗口大小.默认是保持原来大小,而让长文本滚动
             _codeTF.adjustsFontSizeToFitWidth = YES;
             //设置自动缩小显示的最小字体大小
