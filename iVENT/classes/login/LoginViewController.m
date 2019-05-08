@@ -57,6 +57,7 @@
     _userNameTF.textColor = [UIColor whiteColor];
     _userNameTF.clearButtonMode = UITextFieldViewModeWhileEditing;
     _userNameTF.returnKeyType = UIReturnKeyDone;
+    _userNameTF.keyboardType = UIKeyboardTypePhonePad;
     _userNameTF.keyboardType = UIKeyboardTypeTwitter;
     _userNameTF.autocapitalizationType = UITextAutocapitalizationTypeNone;
     _userNameTF.autocorrectionType = UITextAutocorrectionTypeNo;
