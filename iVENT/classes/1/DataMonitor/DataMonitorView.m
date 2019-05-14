@@ -466,8 +466,13 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         cell.block = ^(NSString *fieldText) {
             AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
             NSNumber *dataValue;
+            //风阀传感器
             if ([section.datapointType intValue] == 7) {
                 dataValue = [NSNumber numberWithInt:[[NSString valueFromFloatSend:[NSNumber numberWithInt:[fieldText intValue]] X1:0 X2:4095 Y1:0 Y2:90] intValue]];
+            }
+            //变频器
+            if ([section.datapointType intValue] == 4) {
+                dataValue = [NSNumber numberWithInt:[fieldText intValue]];
             }
             
             [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
