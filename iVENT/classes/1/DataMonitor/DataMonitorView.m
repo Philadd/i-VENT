@@ -252,8 +252,6 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                                     }
                                     [array addObject:cell];
                                 }
-                            }else{
-                                
                             }
                             
                         }];
@@ -264,9 +262,10 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     }
                     
                 }];
-                if ([model.datapointType intValue] == 3) {
-                    array = (NSMutableArray *)[[array reverseObjectEnumerator] allObjects];
-                }
+//                //数组反向
+//                if ([model.datapointType intValue] == 3) {
+//                    array = (NSMutableArray *)[[array reverseObjectEnumerator] allObjects];
+//                }
                 model.cellArray = [array copy];
                 [_sectionData addObject:model];
                 //NSLog(@"我的数组%@",model.cellArray);
