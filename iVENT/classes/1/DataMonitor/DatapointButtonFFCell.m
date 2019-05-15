@@ -45,6 +45,7 @@
     if (self.block) {
         NSString *data = [NSString stringWithFormat:@"%d",255];
         self.block(data);
+        NSLog(@"发送置FF信号.....%@",data);
     }
     if (_dataMonitorBtn.tag == yUnselect) {
         _dataMonitorBtn.tag = ySelect;

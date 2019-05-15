@@ -423,6 +423,10 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%u",[model.value intValue]];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",model.unit];
                     break;
+                case 5:   //电场高压
+                    cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%u",[model.value intValue]];
+                    cell.uintData.text = [NSString stringWithFormat:@"%@",model.unit];
+                    break;
                 case 6:   //振动传感器
                     cell.dataMonitorDataTF.text = [NSString stringWithFormat:@"%.6f",[model.value floatValue]];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",model.unit];
@@ -433,17 +437,17 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     break;
                     
                 case 11:  //温度传感器
-                    cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:-50 Y2:150 unit:@""];
+                    cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:600 X2:3000 Y1:-50 Y2:150 unit:@""];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",@"度"];
                     break;
                     
                 case 12:  //风压传感器
-                    cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:0 Y2:5000 unit:@""];
+                    cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:600 X2:3000 Y1:0 Y2:5000 unit:@""];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",@"pa"];
                     break;
                     
                 case 13:  //噪声传感器
-                    cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:30 Y2:120 unit:@""];
+                    cell.dataMonitorDataTF.text = [NSString valueFromFloat:model.value X1:600 X2:3000 Y1:30 Y2:120 unit:@""];
                     cell.uintData.text = [NSString stringWithFormat:@"%@",@"dB"];
                     break;
                     
@@ -561,6 +565,9 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                 case 4:   //变频器
                     cell.monitorData.text = [NSString stringWithFormat:@"%@%@",model.value,model.unit];
                     break;
+                case 5:   //电场高压
+                    cell.monitorData.text = [NSString stringWithFormat:@"%.2f%@",[model.value floatValue],model.unit];
+                    break;
                 case 6:   //振动传感器
                     cell.monitorData.text = [NSString stringWithFormat:@"%.6f%@",[model.value floatValue],model.unit];
                     break;
@@ -569,15 +576,15 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     break;
                     
                 case 11:  //温度传感器
-                    cell.monitorData.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:-50 Y2:150 unit:@"度"];
+                    cell.monitorData.text = [NSString valueFromFloat:model.value X1:600 X2:3000 Y1:-50 Y2:150 unit:@"度"];
                     break;
                     
                 case 12:  //风压传感器
-                    cell.monitorData.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:0 Y2:5000 unit:@"pa"];
+                    cell.monitorData.text = [NSString valueFromFloat:model.value X1:600 X2:3000 Y1:0 Y2:5000 unit:@"pa"];
                     break;
                     
                 case 13:  //噪声传感器
-                    cell.monitorData.text = [NSString valueFromFloat:model.value X1:400 X2:3000 Y1:30 Y2:120 unit:@"dB"];
+                    cell.monitorData.text = [NSString valueFromFloat:model.value X1:600 X2:3000 Y1:30 Y2:120 unit:@"dB"];
                     break;
                     
                 default:
