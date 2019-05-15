@@ -106,12 +106,12 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
         _sectionData = [[NSMutableArray alloc]init];
         if ([[dic objectForKey:@"data"] isKindOfClass:[NSArray class]] && [[dic objectForKey:@"data"] count] > 0) {
             [[dic objectForKey:@"data"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                
+                //NSLog(@"wodeshuju%@",dic);
                 DeviceSectionModel *model = [[DeviceSectionModel alloc] init];
                 
                 model.deviceGroupName = J2String([obj objectForKey:@"name"]);
                 model.datapointGroupMac = J2String([obj objectForKey:@"mac"]);
-                model.datapointType = J2String([obj objectForKey:@"type"]);
+                model.datapointType = ([obj objectForKey:@"type"]);
                 
                 NSMutableArray *array = [[NSMutableArray alloc] init];
                 [obj[@"streams"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -144,16 +144,16 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                     if ([FarmDatabase shareInstance].deviceDicOnenet) {
                         NSArray *onenetDatapoints = [[NSArray alloc] init];
                         onenetDatapoints = [[[[FarmDatabase shareInstance].deviceDicOnenet objectForKey:@"data"] objectForKey:@"devices"] copy];
-                        [[onenetDatapoints[0] objectForKey:@"datastreams"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                            if (obj[@"id"] && [obj[@"id"] isEqualToString:[NSString stringWithFormat:@"8%@",[cell.streamId substringWithRange:NSMakeRange(1, 3)]]]) {
-                                if (obj[@"value"] && ![obj[@"value"] intValue]) {
+                        [[onenetDatapoints[0] objectForKey:@"datastreams"] enumerateObjectsUsingBlock:^(id  _Nonnull obj1, NSUInteger idx, BOOL * _Nonnull stop) {
+                            if (obj1[@"id"] && [obj1[@"id"] isEqualToString:[NSString stringWithFormat:@"8%@",[cell.streamId substringWithRange:NSMakeRange(1, 3)]]]) {
+                                if (obj1[@"value"] && ![obj1[@"value"] intValue]) {
                                     cell.isUnusual = 1;//表示数据异常
                                 }else{
                                     cell.isUnusual = 0;
                                 }
                             }
-                            if (obj[@"id"] && [obj[@"id"] isEqualToString:cell.streamId]) {
-                                if (obj[@"value"] && [obj[@"value"] isKindOfClass:[NSNumber class]]) {
+                            if (obj1[@"id"] && [obj1[@"id"] isEqualToString:cell.streamId]) {
+                                if (obj1[@"value"] && [obj1[@"value"] isKindOfClass:[NSNumber class]]) {
                                     if (_controledMonitors.count > 0) {
                                         
                                         int hasConmodel = 0;//判断是否有conmodel；
@@ -166,8 +166,8 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                                                 
                                                 hasConmodel = 1;//存在该监控点conmodel；
                                                 
-                                                if ([obj[@"value"] intValue] == [conModel.modifyValue intValue]) {
-                                                    cell.value = obj[@"value"];
+                                                if ([obj1[@"value"] intValue] == [conModel.modifyValue intValue]) {
+                                                    cell.value = obj1[@"value"];
                                                     [_controledMonitors removeObject:conModel];
                                                     break;
                                                 }
@@ -205,58 +205,64 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                                                     
                                                     break;
                                                 }else{
-                                                    cell.value = obj[@"value"];
+                                                    cell.value = obj1[@"value"];
                                                     [_controledMonitors removeObject:conModel];
                                                     break;
                                                 }
                                             }
                                         }
                                         if (!hasConmodel) {
-                                            cell.value = obj[@"value"];
+                                            cell.value = obj1[@"value"];
                                         }
                                     }else{
-                                        cell.value = obj[@"value"];
+                                        cell.value = obj1[@"value"];
                                     }
                                 }else{
                                     NSLog(@"value不是number类型");
                                 }
                             }
-                        }];
-                    }
-                    
-                    if ([model.datapointType intValue] == 3) {
-                        //int value = 0xfff;
-                        int value = [obj[@"value"] intValue];
-                        for (int i= 0; i< 12 ; i++) {
-                            DeviceCellModel *cell = [[DeviceCellModel alloc] init];
-                            cell.streamName = [NSString stringWithFormat:@"%d",12-i];
-                            cell.value = [NSNumber numberWithInt:value & 0x01];
-                            value = value >> 1;
-                            if (obj[@"streamId"]) {
-                                cell.streamId = J2String(obj[@"streamId"]);
-                            }
-                            if (obj[@"rw"]) {
-                                cell.writeRead = J2Number(obj[@"rw"]);
+                            if ([model.datapointType intValue] == 3 && [obj1[@"id"] isEqualToString:cell.streamId]) {
+                                //int value = 8;
+                                //NSLog(@"jkkhkh%d",[obj1[@"value"] intValue]);
+                                int value = [obj1[@"value"] intValue];
+                                for (int i= 0; i< 12 ; i++) {
+                                    DeviceCellModel *cell = [[DeviceCellModel alloc] init];
+                                    cell.streamName = [NSString stringWithFormat:@"%d",i+1];
+                                    cell.value = [NSNumber numberWithInt:value & 0x01];
+                                    value = value >> 1;
+                                    if (obj1[@"streamId"]) {
+                                        cell.streamId = J2String(obj1[@"streamId"]);
+                                    }
+                                    if (obj[@"rw"]) {
+                                        cell.writeRead = J2Number(obj1[@"rw"]);
+
+                                    }
+                                    if (obj[@"unit"]) {
+                                        cell.unit = J2String(obj1[@"unit"]);
+                                    }
+                                    if (obj[@"sn"]) {
+                                        cell.sn = J2String(obj1[@"sn"]);
+                                    }
+                                    if (obj[@"streamUid"]) {
+                                        cell.streamUid = J2String(obj1[@"streamUid"]);
+                                    }
+
+                                    if (obj[@"dataType"]) {
+                                        cell.dataType = J2Number(obj1[@"dataType"]);
+                                    }
+                                    [array addObject:cell];
+                                }
+                            }else{
                                 
                             }
-                            if (obj[@"unit"]) {
-                                cell.unit = J2String(obj[@"unit"]);
-                            }
-                            if (obj[@"sn"]) {
-                                cell.sn = J2String(obj[@"sn"]);
-                            }
-                            if (obj[@"streamUid"]) {
-                                cell.streamUid = J2String(obj[@"streamUid"]);
-                            }
                             
-                            if (obj[@"dataType"]) {
-                                cell.dataType = J2Number(obj[@"dataType"]);
-                            }
+                        }];
+                        
+                        if ([model.datapointType intValue] != 3) {
                             [array addObject:cell];
                         }
-                    }else{
-                        [array addObject:cell];
                     }
+                    
                 }];
                 if ([model.datapointType intValue] == 3) {
                     array = (NSMutableArray *)[[array reverseObjectEnumerator] allObjects];
@@ -539,8 +545,7 @@ NSString *const SectionIdentifier_device = @"SectionHeader_device";
                       NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:nil];
                       NSData * data = [NSJSONSerialization dataWithJSONObject:responseDic options:(NSJSONWritingOptions)0 error:nil];
                       NSString * daetr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-                      // NSLog(@"success:%@",daetr);
-                      
+                      NSLog(@"success:%@",daetr);
                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                       NSLog(@"Error:%@",error);
                   }];

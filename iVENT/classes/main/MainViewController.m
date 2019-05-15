@@ -67,7 +67,7 @@
         UIButton *scanButton = [[UIButton alloc]initWithFrame:CGRectMake(0,0,30,30)];
         [scanButton setImage:[UIImage imageNamed:@"二维码"] forState:UIControlStateNormal];
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:scanButton];
-        self.navigationItem.rightBarButtonItem= rightItem;
+        //self.navigationItem.rightBarButtonItem= rightItem;
         self.navigationItem.leftBarButtonItem = leftItem;
         
     }
