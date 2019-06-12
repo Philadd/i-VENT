@@ -11,6 +11,7 @@
 #import "LoginViewController.h"
 #import <IQKeyboardManager/IQKeyboardManager.h>
 #import <UserNotifications/UserNotifications.h>
+#import <Bugly/Bugly.h>
 
 
 @interface AppDelegate ()
@@ -34,7 +35,8 @@
     [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert + UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
         
     }];
-    
+    //app错误日志统计
+    [Bugly startWithAppId:@"834b69ad42"];
     
     /*
      *百度地图
